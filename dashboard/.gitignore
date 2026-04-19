@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.env
+server/data/research.json
+server/data/uploads/
+*.log

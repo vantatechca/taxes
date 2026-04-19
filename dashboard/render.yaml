@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: digital-empire-dashboard
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: node server/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: DATABASE_URL
+        sync: false
+      - key: SEED_DATA
+        value: true
+      - key: CLIENT_URL
+        sync: false
