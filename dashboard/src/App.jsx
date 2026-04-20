@@ -117,23 +117,6 @@ function AppInner() {
         </nav>
 
         {/* Reset data button */}
-        {sidebarOpen && currentRole.level === "owner" && (
-          <div className="px-3 py-2 border-t border-gray-800">
-            {showResetConfirm ? (
-              <div className="space-y-1.5">
-                <p className="text-xs text-red-400">Reset all edits to seed data?</p>
-                <div className="flex gap-1.5">
-                  <button onClick={() => { resetAll(); setShowResetConfirm(false); }} className="flex-1 px-2 py-1 text-xs bg-red-600 hover:bg-red-500 text-white rounded transition-colors">Confirm</button>
-                  <button onClick={() => setShowResetConfirm(false)} className="flex-1 px-2 py-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 rounded transition-colors">Cancel</button>
-                </div>
-              </div>
-            ) : (
-              <button onClick={() => setShowResetConfirm(true)} className="w-full px-3 py-1.5 text-xs text-gray-500 hover:text-gray-300 hover:bg-gray-800 rounded-lg transition-colors text-left">
-                Reset to Seed Data
-              </button>
-            )}
-          </div>
-        )}
 
         {/* User */}
         <div className="border-t border-gray-800 px-3 py-3">
