@@ -534,8 +534,8 @@ export default function PLRVault() {
             onClick={() => setActiveSection(s.id)}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
               activeSection === s.id
-                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
-                : "bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700/70"
+                ? "bg-indigo-600 text-gray-900 dark:text-white shadow-lg shadow-indigo-600/20"
+                : "bg-slate-800 text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:bg-slate-700/70"
             }`}
           >
             <span>{s.icon}</span>
@@ -546,13 +546,13 @@ export default function PLRVault() {
 
       {/* ════════════════ Section 1: Recommended for Your Niches ════════════════ */}
       {activeSection === "niches" && (
-        <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <span>💡</span> Recommended for Your Niches
               </h2>
-              <p className="text-xs text-slate-500 mt-1">PLR product types that sell well in each niche</p>
+              <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">PLR product types that sell well in each niche</p>
             </div>
             <div className="flex items-center gap-3 text-xs text-slate-500">
               <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-green-500 inline-block" /> Have products</span>
@@ -570,15 +570,15 @@ export default function PLRVault() {
               return (
                 <div
                   key={niche.name}
-                  className={`bg-slate-800 rounded-xl p-5 border transition-all hover:shadow-lg hover:shadow-black/20 ${
-                    hasProducts ? "border-green-700/50" : "border-slate-700/50"
+                  className={`bg-gray-50 dark:bg-slate-800 rounded-xl p-5 border transition-all hover:shadow-lg hover:shadow-black/10 dark:hover:shadow-black/20 ${
+                    hasProducts ? "border-green-500/50 dark:border-green-700/50" : "border-gray-200 dark:border-slate-700/50"
                   }`}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <span className="text-2xl">{niche.emoji}</span>
                       <div>
-                        <h3 className="text-sm font-semibold text-white">{niche.name}</h3>
+                        <h3 className="text-sm font-semibold text-gray-800 dark:text-white">{niche.name}</h3>
                         {hasProducts && (
                           <span className="text-[10px] text-green-400">{productCount} product{productCount !== 1 ? "s" : ""}</span>
                         )}
@@ -589,8 +589,8 @@ export default function PLRVault() {
 
                   <div className="space-y-1.5 mb-4">
                     {niche.suggestions.map((s, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs text-slate-400">
-                        <span className="text-slate-600">-</span>
+                      <div key={i} className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
+                        <span className="text-gray-400 dark:text-slate-600">-</span>
                         <span>{s}</span>
                       </div>
                     ))}
@@ -601,7 +601,7 @@ export default function PLRVault() {
                       setSearchingNiche(niche.name);
                       window.open(`https://www.google.com/search?q=${encodeURIComponent(`${niche.name} PLR products digital download`)}`, "_blank");
                     }}
-                    className="w-full bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white px-3 py-2 rounded-lg text-xs font-medium transition-all text-center"
+                    className="w-full bg-indigo-50 dark:bg-indigo-600/20 hover:bg-indigo-600 text-indigo-600 dark:text-indigo-400 hover:text-white px-3 py-2 rounded-lg text-xs font-medium transition-all text-center border border-indigo-200 dark:border-transparent"
                   >
                     Find PLR
                   </button>
@@ -614,13 +614,13 @@ export default function PLRVault() {
 
       {/* ════════════════ Section 2: Marketplace Directory ════════════════ */}
       {activeSection === "marketplace" && (
-        <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <span>🏪</span> Marketplace Directory
               </h2>
-              <p className="text-xs text-slate-500 mt-1">{sources.length} source{sources.length !== 1 ? "s" : ""} tracked</p>
+              <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">{sources.length} source{sources.length !== 1 ? "s" : ""} tracked</p>
             </div>
             <button
               onClick={() => {
@@ -628,7 +628,7 @@ export default function PLRVault() {
                 setEditingSourceId(null);
                 setShowSourceForm(true);
               }}
-              className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              className="bg-indigo-600 hover:bg-indigo-500 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
             >
               + Add Source
             </button>
@@ -636,37 +636,37 @@ export default function PLRVault() {
 
           {/* Add/Edit Source Form */}
           {showSourceForm && (
-            <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-5 mb-5 space-y-4">
+            <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-5 mb-5 space-y-4">
               <h3 className="text-sm font-semibold text-gray-300">
                 {editingSourceId ? "Edit Source" : "Add New Source"}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1">Name *</label>
+                  <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Name *</label>
                   <input
                     type="text"
                     value={sourceForm.name}
                     onChange={(e) => setSourceForm((p) => ({ ...p, name: e.target.value }))}
                     placeholder="e.g. PLR.me"
-                    className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                    className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1">URL *</label>
+                  <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">URL *</label>
                   <input
                     type="text"
                     value={sourceForm.url}
                     onChange={(e) => setSourceForm((p) => ({ ...p, url: e.target.value }))}
                     placeholder="https://..."
-                    className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                    className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1">Type</label>
+                  <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Type</label>
                   <select
                     value={sourceForm.type}
                     onChange={(e) => setSourceForm((p) => ({ ...p, type: e.target.value }))}
-                    className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-3 py-2 text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-indigo-500"
                   >
                     <option value="PLR">PLR</option>
                     <option value="MRR">MRR</option>
@@ -674,21 +674,21 @@ export default function PLRVault() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1">Categories (comma separated)</label>
+                  <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Categories (comma separated)</label>
                   <input
                     type="text"
                     value={sourceForm.categories}
                     onChange={(e) => setSourceForm((p) => ({ ...p, categories: e.target.value }))}
                     placeholder="Finance, Health, Business"
-                    className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                    className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1">Price Range</label>
+                  <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Price Range</label>
                   <select
                     value={sourceForm.price_range}
                     onChange={(e) => setSourceForm((p) => ({ ...p, price_range: e.target.value }))}
-                    className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-3 py-2 text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-indigo-500"
                   >
                     {PRICE_RANGE_OPTIONS.map((pr) => (
                       <option key={pr.value} value={pr.value}>{pr.label} - {pr.desc}</option>
@@ -696,41 +696,41 @@ export default function PLRVault() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1">Last Visited</label>
+                  <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Last Visited</label>
                   <input
                     type="date"
                     value={sourceForm.last_visited}
                     onChange={(e) => setSourceForm((p) => ({ ...p, last_visited: e.target.value }))}
-                    className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 focus:border-indigo-500 focus:outline-none"
+                    className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 focus:border-indigo-500 focus:outline-none"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-xs text-slate-500 mb-1">Quality Rating</label>
+                <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Quality Rating</label>
                 <StarRating value={sourceForm.rating} onChange={(v) => setSourceForm((p) => ({ ...p, rating: v }))} />
               </div>
               <div>
-                <label className="block text-xs text-slate-500 mb-1">Notes</label>
+                <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Notes</label>
                 <textarea
                   value={sourceForm.notes}
                   onChange={(e) => setSourceForm((p) => ({ ...p, notes: e.target.value }))}
                   placeholder="Notes about this source..."
                   rows={2}
-                  className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none resize-none"
+                  className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none resize-none"
                 />
               </div>
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleSaveSource}
                   disabled={sourceSaving}
-                  className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+                  className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
                 >
                   {sourceSaving && <Spinner />}
                   {editingSourceId ? "Update" : "Add"} Source
                 </button>
                 <button
                   onClick={() => { setShowSourceForm(false); setEditingSourceId(null); }}
-                  className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  className="bg-slate-700 hover:bg-slate-600 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   Cancel
                 </button>
@@ -740,7 +740,7 @@ export default function PLRVault() {
 
           {/* Source Cards */}
           {sources.length === 0 ? (
-            <p className="text-sm text-slate-500 py-4">No sources added yet. Click &quot;+ Add Source&quot; to get started.</p>
+            <p className="text-sm text-gray-400 dark:text-slate-500 py-4">No sources added yet. Click &quot;+ Add Source&quot; to get started.</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {sources.map((src) => {
@@ -751,10 +751,10 @@ export default function PLRVault() {
                 const isEditingNotes = editingNotes[srcId] !== undefined;
 
                 return (
-                  <div key={srcId} className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-5 space-y-3">
+                  <div key={srcId} className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-5 space-y-3">
                     <div className="flex items-start justify-between">
                       <div className="min-w-0 flex-1">
-                        <h3 className="text-sm font-semibold text-white truncate">{src.name}</h3>
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white truncate">{src.name}</h3>
                         <a
                           href={src.url}
                           target="_blank"
@@ -784,7 +784,7 @@ export default function PLRVault() {
                     {cats.length > 0 && (
                       <div className="flex flex-wrap gap-1">
                         {cats.map((cat, i) => (
-                          <span key={i} className="text-xs bg-slate-700 text-gray-300 px-2 py-0.5 rounded">
+                          <span key={i} className="text-xs bg-slate-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded">
                             {cat}
                           </span>
                         ))}
@@ -816,7 +816,7 @@ export default function PLRVault() {
                                 setEditingNotes((prev) => { const next = { ...prev }; delete next[srcId]; return next; });
                               }
                             }}
-                            className="flex-1 bg-gray-900 border border-slate-600 rounded px-2 py-1 text-xs text-gray-300 focus:outline-none focus:border-indigo-500"
+                            className="flex-1 bg-white dark:bg-gray-900 border border-slate-600 rounded px-2 py-1 text-xs text-gray-600 dark:text-gray-300 focus:outline-none focus:border-indigo-500"
                             autoFocus
                           />
                           <button
@@ -832,7 +832,7 @@ export default function PLRVault() {
                       ) : (
                         <p
                           onClick={() => setEditingNotes((prev) => ({ ...prev, [srcId]: src.notes || "" }))}
-                          className="text-xs text-slate-500 line-clamp-2 cursor-pointer hover:text-slate-400 transition-colors"
+                          className="text-xs text-gray-400 dark:text-slate-500 line-clamp-2 cursor-pointer hover:text-slate-400 transition-colors"
                           title="Click to edit notes"
                         >
                           {src.notes || "Click to add notes..."}
@@ -847,19 +847,19 @@ export default function PLRVault() {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => handleUpdateSourceField(srcId, "last_visited", new Date().toISOString().slice(0, 10))}
-                        className="bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                        className="bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-gray-900 dark:hover:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                       >
                         Visit
                       </a>
                       <button
                         onClick={() => handleEditSource(src)}
-                        className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                        className="bg-slate-700 hover:bg-slate-600 text-gray-900 dark:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDeleteSource(srcId)}
-                        className="bg-red-900/30 hover:bg-red-600 text-red-400 hover:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                        className="bg-red-900/30 hover:bg-red-600 text-red-400 hover:text-gray-900 dark:hover:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                       >
                         Delete
                       </button>
@@ -876,28 +876,28 @@ export default function PLRVault() {
       {activeSection === "inventory" && (
         <div className="space-y-6">
           {/* Summary Dashboard */}
-          <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <span>📦</span> Inventory Overview
             </h2>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
-              <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4 text-center">
-                <p className="text-xs text-slate-400 mb-1">Total Invested</p>
-                <p className="text-xl font-bold text-white">${summary.totalInvested.toFixed(2)}</p>
+              <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4 text-center">
+                <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Total Invested</p>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">${summary.totalInvested.toFixed(2)}</p>
               </div>
-              <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4 text-center">
-                <p className="text-xs text-slate-400 mb-1">Total Products</p>
-                <p className="text-xl font-bold text-white">{summary.totalProducts}</p>
+              <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4 text-center">
+                <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Total Products</p>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">{summary.totalProducts}</p>
               </div>
-              <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4 text-center">
-                <p className="text-xs text-slate-400 mb-1">Avg Margin</p>
+              <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4 text-center">
+                <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Avg Margin</p>
                 <p className={`text-xl font-bold ${summary.avgMargin >= 0 ? "text-green-400" : "text-red-400"}`}>
                   {summary.avgMargin.toFixed(1)}%
                 </p>
               </div>
-              <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4 text-center">
-                <p className="text-xs text-slate-400 mb-1">Best ROI Product</p>
+              <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4 text-center">
+                <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Best ROI Product</p>
                 <p className="text-sm font-semibold text-yellow-400 truncate" title={summary.bestROI?.name}>
                   {summary.bestROI?.name || "N/A"}
                 </p>
@@ -905,16 +905,16 @@ export default function PLRVault() {
                   <p className="text-xs text-slate-500">{summary.bestROIVal.toFixed(0)}% ROI</p>
                 )}
               </div>
-              <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4 text-center">
-                <p className="text-xs text-slate-400 mb-1">Monthly Revenue Est.</p>
+              <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4 text-center">
+                <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Monthly Revenue Est.</p>
                 <p className="text-xl font-bold text-green-400">${summary.monthlyEstimate.toFixed(2)}</p>
               </div>
             </div>
 
             {/* Niche pie chart */}
             {summary.nicheChartData.length > 0 && (
-              <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4">
-                <h3 className="text-sm font-semibold text-gray-300 mb-3">Products by Niche</h3>
+              <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4">
+                <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">Products by Niche</h3>
                 <div className="h-56">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -943,20 +943,20 @@ export default function PLRVault() {
           </div>
 
           {/* Product Table */}
-          <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
             <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-              <h2 className="text-lg font-semibold text-white">All Products</h2>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">All Products</h2>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setShowCSVImport(true)}
-                  className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors"
+                  className="bg-slate-700 hover:bg-slate-600 text-gray-900 dark:text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors"
                 >
                   Import CSV
                 </button>
                 <button
                   onClick={exportCSV}
                   disabled={products.length === 0}
-                  className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors"
+                  className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-gray-900 dark:text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors"
                 >
                   Export CSV
                 </button>
@@ -966,7 +966,7 @@ export default function PLRVault() {
                     setEditingProductId(null);
                     setShowProductForm(true);
                   }}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  className="bg-indigo-600 hover:bg-indigo-500 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   + Add Product
                 </button>
@@ -975,7 +975,7 @@ export default function PLRVault() {
 
             {/* CSV Import */}
             {showCSVImport && (
-              <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4 mb-4 space-y-3">
+              <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4 mb-4 space-y-3">
                 <h3 className="text-sm font-semibold text-gray-300">Bulk Import (CSV)</h3>
                 <p className="text-xs text-slate-500">
                   Paste CSV with headers: name, source, niche, format, purchase_price, resale_price, status, notes
@@ -985,18 +985,18 @@ export default function PLRVault() {
                   onChange={(e) => setCsvText(e.target.value)}
                   placeholder={"name,source,niche,format,purchase_price,resale_price,status,notes\nBudget Planner,PLR.me,Personal Finance,Spreadsheet,15,45,Purchased,Great margins"}
                   rows={6}
-                  className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none resize-none font-mono text-xs"
+                  className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none resize-none font-mono text-xs"
                 />
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleCSVImport}
-                    className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                    className="bg-indigo-600 hover:bg-indigo-500 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                   >
                     Import
                   </button>
                   <button
                     onClick={() => { setShowCSVImport(false); setCsvText(""); }}
-                    className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                    className="bg-slate-700 hover:bg-slate-600 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                   >
                     Cancel
                   </button>
@@ -1006,37 +1006,37 @@ export default function PLRVault() {
 
             {/* Add/Edit Product Form */}
             {showProductForm && (
-              <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-5 mb-4 space-y-4">
+              <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-5 mb-4 space-y-4">
                 <h3 className="text-sm font-semibold text-gray-300">
                   {editingProductId ? "Edit Product" : "Add New Product"}
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs text-slate-500 mb-1">Product Name *</label>
+                    <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Product Name *</label>
                     <input
                       type="text"
                       value={productForm.name}
                       onChange={(e) => setProductForm((p) => ({ ...p, name: e.target.value }))}
                       placeholder="e.g. Budget Planner Bundle"
-                      className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                      className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-500 mb-1">Source Marketplace</label>
+                    <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Source Marketplace</label>
                     <input
                       type="text"
                       value={productForm.source}
                       onChange={(e) => setProductForm((p) => ({ ...p, source: e.target.value }))}
                       placeholder="e.g. PLR.me"
-                      className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                      className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-500 mb-1">Niche / Category</label>
+                    <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Niche / Category</label>
                     <select
                       value={productForm.niche}
                       onChange={(e) => setProductForm((p) => ({ ...p, niche: e.target.value, category: e.target.value }))}
-                      className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-indigo-500"
+                      className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-3 py-2 text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-indigo-500"
                     >
                       <option value="">Select niche...</option>
                       {NICHES.map((n) => (
@@ -1046,11 +1046,11 @@ export default function PLRVault() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-500 mb-1">Format</label>
+                    <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Format</label>
                     <select
                       value={productForm.format}
                       onChange={(e) => setProductForm((p) => ({ ...p, format: e.target.value }))}
-                      className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-indigo-500"
+                      className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-3 py-2 text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-indigo-500"
                     >
                       {FORMAT_OPTIONS.map((f) => (
                         <option key={f} value={f}>{f}</option>
@@ -1058,31 +1058,31 @@ export default function PLRVault() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-500 mb-1">Purchase Price ($)</label>
+                    <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Purchase Price ($)</label>
                     <input
                       type="number"
                       value={productForm.purchase_price}
                       onChange={(e) => setProductForm((p) => ({ ...p, purchase_price: e.target.value }))}
                       placeholder="0.00"
-                      className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                      className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-500 mb-1">Resale Price ($)</label>
+                    <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Resale Price ($)</label>
                     <input
                       type="number"
                       value={productForm.resale_price}
                       onChange={(e) => setProductForm((p) => ({ ...p, resale_price: e.target.value }))}
                       placeholder="0.00"
-                      className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                      className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-500 mb-1">Status</label>
+                    <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Status</label>
                     <select
                       value={productForm.status}
                       onChange={(e) => setProductForm((p) => ({ ...p, status: e.target.value }))}
-                      className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-indigo-500"
+                      className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-3 py-2 text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-indigo-500"
                     >
                       {STATUS_OPTIONS.map((s) => (
                         <option key={s} value={s}>{s}</option>
@@ -1090,48 +1090,48 @@ export default function PLRVault() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-500 mb-1">Sales Count</label>
+                    <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Sales Count</label>
                     <input
                       type="number"
                       value={productForm.sales_count}
                       onChange={(e) => setProductForm((p) => ({ ...p, sales_count: parseInt(e.target.value) || 0 }))}
                       placeholder="0"
-                      className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                      className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-500 mb-1">Revenue ($)</label>
+                    <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Revenue ($)</label>
                     <input
                       type="number"
                       value={productForm.revenue}
                       onChange={(e) => setProductForm((p) => ({ ...p, revenue: parseFloat(e.target.value) || 0 }))}
                       placeholder="0.00"
-                      className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                      className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-500 mb-1">Notes</label>
+                  <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Notes</label>
                   <textarea
                     value={productForm.notes}
                     onChange={(e) => setProductForm((p) => ({ ...p, notes: e.target.value }))}
                     placeholder="Any additional notes..."
                     rows={2}
-                    className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none resize-none"
+                    className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none resize-none"
                   />
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleSaveProduct}
                     disabled={productSaving}
-                    className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+                    className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
                   >
                     {productSaving && <Spinner />}
                     {editingProductId ? "Update" : "Add"} Product
                   </button>
                   <button
                     onClick={() => { setShowProductForm(false); setEditingProductId(null); }}
-                    className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                    className="bg-slate-700 hover:bg-slate-600 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                   >
                     Cancel
                   </button>
@@ -1141,12 +1141,12 @@ export default function PLRVault() {
 
             {/* Product Table */}
             {products.length === 0 ? (
-              <p className="text-sm text-slate-500 py-4">No products tracked yet. Add your first product or import via CSV.</p>
+              <p className="text-sm text-gray-400 dark:text-slate-500 py-4">No products tracked yet. Add your first product or import via CSV.</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm text-gray-300">
                   <thead>
-                    <tr className="text-xs text-slate-500 uppercase tracking-wide border-b border-slate-700/40">
+                    <tr className="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wide border-b border-slate-700/40">
                       <th className="text-left py-3 px-2">Product</th>
                       <th className="text-left py-3 px-2">Source</th>
                       <th className="text-left py-3 px-2">Niche</th>
@@ -1270,26 +1270,26 @@ export default function PLRVault() {
       {activeSection === "roi" && (
         <div className="space-y-6">
           {/* Revenue overview */}
-          <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <span>📊</span> ROI Tracker
             </h2>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4 text-center">
-                <p className="text-xs text-slate-400 mb-1">Selling Products</p>
-                <p className="text-xl font-bold text-white">{roiData.sellingProducts.length}</p>
+              <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4 text-center">
+                <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Selling Products</p>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">{roiData.sellingProducts.length}</p>
               </div>
-              <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4 text-center">
-                <p className="text-xs text-slate-400 mb-1">Total Revenue</p>
+              <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4 text-center">
+                <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Total Revenue</p>
                 <p className="text-xl font-bold text-green-400">${summary.totalRevenue.toFixed(2)}</p>
               </div>
-              <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4 text-center">
-                <p className="text-xs text-slate-400 mb-1">Total Invested</p>
-                <p className="text-xl font-bold text-white">${summary.totalInvested.toFixed(2)}</p>
+              <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4 text-center">
+                <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Total Invested</p>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">${summary.totalInvested.toFixed(2)}</p>
               </div>
-              <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4 text-center">
-                <p className="text-xs text-slate-400 mb-1">Net Profit</p>
+              <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4 text-center">
+                <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Net Profit</p>
                 <p className={`text-xl font-bold ${(summary.totalRevenue - summary.totalInvested) >= 0 ? "text-green-400" : "text-red-400"}`}>
                   ${(summary.totalRevenue - summary.totalInvested).toFixed(2)}
                 </p>
@@ -1298,8 +1298,8 @@ export default function PLRVault() {
 
             {/* Revenue by product bar chart */}
             {roiData.topPerformers.length > 0 && (
-              <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4 mb-6">
-                <h3 className="text-sm font-semibold text-gray-300 mb-3">Revenue by Product</h3>
+              <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4 mb-6">
+                <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">Revenue by Product</h3>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={roiData.topPerformers.slice(0, 10).map((p) => ({
@@ -1326,8 +1326,8 @@ export default function PLRVault() {
           </div>
 
           {/* Top Performers */}
-          <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-            <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <span>🏆</span> Top Performers
             </h3>
             {roiData.topPerformers.length === 0 ? (
@@ -1337,9 +1337,9 @@ export default function PLRVault() {
                 {roiData.topPerformers.slice(0, 5).map((p) => {
                   const prodId = p.id || p._id;
                   return (
-                    <div key={prodId} className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4 flex items-center justify-between">
+                    <div key={prodId} className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4 flex items-center justify-between">
                       <div className="min-w-0 flex-1">
-                        <h4 className="text-sm font-semibold text-white truncate">{p.name}</h4>
+                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white truncate">{p.name}</h4>
                         <p className="text-xs text-slate-500">{p.niche || p.category || "No niche"} | {p.sales_count || 0} sales</p>
                       </div>
                       <div className="flex items-center gap-6 shrink-0 ml-4">
@@ -1361,8 +1361,8 @@ export default function PLRVault() {
 
           {/* Underperformers */}
           {roiData.underperformers.length > 0 && (
-            <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-              <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <span>&#9888;&#65039;</span> Underperformers (0 sales, 30+ days)
               </h3>
               <div className="space-y-3">
@@ -1375,7 +1375,7 @@ export default function PLRVault() {
                   return (
                     <div key={prodId} className="bg-slate-800 border border-red-900/30 rounded-xl p-4 flex items-center justify-between">
                       <div className="min-w-0 flex-1">
-                        <h4 className="text-sm font-semibold text-white truncate">{p.name}</h4>
+                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white truncate">{p.name}</h4>
                         <p className="text-xs text-slate-500">{p.niche || p.category || "No niche"} | Listed {daysSince} days ago</p>
                       </div>
                       <div className="flex items-center gap-4 shrink-0 ml-4">
@@ -1385,7 +1385,7 @@ export default function PLRVault() {
                         </div>
                         <button
                           onClick={() => handleEditProduct(p)}
-                          className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                          className="bg-slate-700 hover:bg-slate-600 text-gray-900 dark:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
                         >
                           Review
                         </button>

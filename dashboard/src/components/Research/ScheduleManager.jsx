@@ -283,29 +283,29 @@ export default function ScheduleManager() {
 
       {/* Cost Dashboard */}
       {costData && (
-        <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-          <h2 className="text-lg font-semibold text-white mb-4">Cost Overview</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Cost Overview</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-3 text-center">
-              <p className="text-xs text-slate-400 mb-1">Runs / Day</p>
-              <p className="text-lg font-bold text-white">
+            <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-3 text-center">
+              <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Runs / Day</p>
+              <p className="text-lg font-bold text-gray-900 dark:text-white">
                 {costData.runs_per_day || costData.runsPerDay || 0}
               </p>
             </div>
-            <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-3 text-center">
-              <p className="text-xs text-slate-400 mb-1">Requests / Day</p>
-              <p className="text-lg font-bold text-white">
+            <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-3 text-center">
+              <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Requests / Day</p>
+              <p className="text-lg font-bold text-gray-900 dark:text-white">
                 {costData.requests_per_day || costData.requestsPerDay || 0}
               </p>
             </div>
-            <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-3 text-center">
-              <p className="text-xs text-slate-400 mb-1">Est. Cost / Day</p>
+            <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-3 text-center">
+              <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Est. Cost / Day</p>
               <p className="text-lg font-bold text-green-400">
                 ${(costData.cost_per_day || costData.costPerDay || 0).toFixed(2)}
               </p>
             </div>
-            <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-3 text-center">
-              <p className="text-xs text-slate-400 mb-1">Est. Cost / Month</p>
+            <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-3 text-center">
+              <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Est. Cost / Month</p>
               <p className="text-lg font-bold text-green-400">
                 ${(costData.cost_per_month || costData.costPerMonth || 0).toFixed(2)}
               </p>
@@ -315,7 +315,7 @@ export default function ScheduleManager() {
           {/* Breakdown by schedule */}
           {costData.breakdown && Array.isArray(costData.breakdown) && costData.breakdown.length > 0 && (
             <div className="mt-4 pt-4 border-t border-slate-700/40">
-              <h3 className="text-sm font-semibold text-gray-300 mb-2">Breakdown by Schedule</h3>
+              <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2">Breakdown by Schedule</h3>
               <div className="space-y-2">
                 {costData.breakdown.map((item, i) => (
                   <div key={i} className="flex items-center justify-between text-sm">
@@ -330,23 +330,23 @@ export default function ScheduleManager() {
       )}
 
       {/* Active Schedules */}
-      <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-white">Schedules ({schedules.length})</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Schedules ({schedules.length})</h2>
           <button
             onClick={() => {
               setForm({ ...EMPTY_FORM });
               setEditingId(null);
               setShowForm(true);
             }}
-            className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            className="bg-indigo-600 hover:bg-indigo-500 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
           >
             + Create Schedule
           </button>
         </div>
 
         {schedules.length === 0 ? (
-          <p className="text-sm text-slate-500 py-4">No schedules configured yet.</p>
+          <p className="text-sm text-gray-400 dark:text-slate-500 py-4">No schedules configured yet.</p>
         ) : (
           <div className="space-y-3">
             {schedules.map((sched) => {
@@ -356,14 +356,14 @@ export default function ScheduleManager() {
               return (
                 <div
                   key={schedId}
-                  className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4"
+                  className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4"
                 >
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-1">
-                        <h3 className="text-sm font-semibold text-white">{sched.name}</h3>
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{sched.name}</h3>
                         <StatusBadge status={sched.status} />
-                        <span className="text-xs bg-slate-700 text-gray-300 px-2 py-0.5 rounded">
+                        <span className="text-xs bg-slate-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded">
                           {SCHEDULE_TYPES.find((t) => t.value === sched.type)?.label || sched.type}
                         </span>
                       </div>
@@ -381,7 +381,7 @@ export default function ScheduleManager() {
                       <button
                         onClick={() => handleTogglePause(sched)}
                         disabled={actionLoading === schedId}
-                        className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-white px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors"
+                        className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-gray-900 dark:text-white px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors"
                       >
                         {actionLoading === schedId && <Spinner />}
                         {isActive ? "Pause" : "Resume"}
@@ -389,20 +389,20 @@ export default function ScheduleManager() {
                       <button
                         onClick={() => handleRunNow(schedId)}
                         disabled={actionLoading === schedId}
-                        className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors"
+                        className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-gray-900 dark:text-white px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors"
                       >
                         {actionLoading === schedId && <Spinner />}
                         Run Now
                       </button>
                       <button
                         onClick={() => handleEdit(sched)}
-                        className="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                        className="bg-slate-700 hover:bg-slate-600 text-gray-900 dark:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(schedId)}
-                        className="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                        className="bg-red-600 hover:bg-red-500 text-gray-900 dark:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
                       >
                         Delete
                       </button>
@@ -417,31 +417,31 @@ export default function ScheduleManager() {
 
       {/* Create/Edit Schedule Form */}
       {showForm && (
-        <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-          <h2 className="text-lg font-semibold text-white mb-4">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             {editingId ? "Edit Schedule" : "Create Schedule"}
           </h2>
 
           <div className="space-y-4">
             {/* Name */}
             <div>
-              <label className="block text-xs text-slate-400 mb-1">Name</label>
+              <label className="block text-xs text-gray-500 dark:text-slate-400 mb-1">Name</label>
               <input
                 type="text"
                 value={form.name}
                 onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
                 placeholder="Schedule name"
-                className="w-full bg-slate-800/80 border border-slate-600/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                className="w-full bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
               />
             </div>
 
             {/* Type */}
             <div>
-              <label className="block text-xs text-slate-400 mb-1">Type</label>
+              <label className="block text-xs text-gray-500 dark:text-slate-400 mb-1">Type</label>
               <select
                 value={form.type}
                 onChange={(e) => setForm((p) => ({ ...p, type: e.target.value }))}
-                className="w-full bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-indigo-500"
+                className="w-full bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-2 text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-indigo-500"
               >
                 {SCHEDULE_TYPES.map((t) => (
                   <option key={t.value} value={t.value}>{t.label}</option>
@@ -450,13 +450,13 @@ export default function ScheduleManager() {
             </div>
 
             {/* Config (dynamic based on type) */}
-            <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4 space-y-3">
+            <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4 space-y-3">
               <h3 className="text-sm font-semibold text-gray-300">Configuration</h3>
 
               {(form.type === "etsy_search" || form.type === "full_cycle") && (
                 <>
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1">
+                    <label className="block text-xs text-gray-500 dark:text-slate-400 mb-1">
                       Search Queries (comma separated)
                     </label>
                     <input
@@ -469,11 +469,11 @@ export default function ScheduleManager() {
                         }))
                       }
                       placeholder="digital planner, printable art, SVG bundle..."
-                      className="w-full bg-slate-800/80 border border-slate-600/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                      className="w-full bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-slate-400 mb-1">
+                    <label className="block text-xs text-gray-500 dark:text-slate-400 mb-1">
                       Pages per Query
                     </label>
                     <input
@@ -490,7 +490,7 @@ export default function ScheduleManager() {
                           },
                         }))
                       }
-                      className="w-24 bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-gray-100 text-center focus:border-indigo-500 focus:outline-none"
+                      className="w-24 bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-2 text-gray-900 dark:text-gray-100 text-center focus:border-indigo-500 focus:outline-none"
                     />
                   </div>
                 </>
@@ -498,7 +498,7 @@ export default function ScheduleManager() {
 
               {(form.type === "etsy_shop" || form.type === "full_cycle") && (
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1">
+                  <label className="block text-xs text-gray-500 dark:text-slate-400 mb-1">
                     Shop URLs (one per line)
                   </label>
                   <textarea
@@ -511,14 +511,14 @@ export default function ScheduleManager() {
                     }
                     placeholder="https://www.etsy.com/shop/ShopName"
                     rows={3}
-                    className="w-full bg-slate-800/80 border border-slate-600/50 rounded-lg px-4 py-2 text-sm text-gray-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none resize-none"
+                    className="w-full bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-4 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-slate-500 focus:border-indigo-500 focus:outline-none resize-none"
                   />
                 </div>
               )}
 
               {(form.type === "trend_check" || form.type === "full_cycle") && (
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1">
+                  <label className="block text-xs text-gray-500 dark:text-slate-400 mb-1">
                     Keywords (comma separated)
                   </label>
                   <input
@@ -531,7 +531,7 @@ export default function ScheduleManager() {
                       }))
                     }
                     placeholder="digital planner, printable wall art..."
-                    className="w-full bg-slate-800/80 border border-slate-600/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                    className="w-full bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
                   />
                 </div>
               )}
@@ -539,7 +539,7 @@ export default function ScheduleManager() {
 
             {/* Frequency */}
             <div>
-              <label className="block text-xs text-slate-400 mb-1">Frequency</label>
+              <label className="block text-xs text-gray-500 dark:text-slate-400 mb-1">Frequency</label>
               <div className="flex flex-wrap gap-2">
                 {FREQUENCY_PRESETS.map((preset) => (
                   <button
@@ -550,7 +550,7 @@ export default function ScheduleManager() {
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
                       form.frequency === preset.value
                         ? "bg-indigo-600 border-indigo-500 text-white"
-                        : "bg-slate-800 border-slate-700/50 text-gray-300 hover:bg-slate-700/70"
+                        : "bg-slate-800 border-gray-200 dark:border-slate-700/50 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:bg-slate-700/70"
                     }`}
                   >
                     {preset.label}
@@ -566,7 +566,7 @@ export default function ScheduleManager() {
                     setForm((p) => ({ ...p, customCron: e.target.value }))
                   }
                   placeholder="Cron expression (e.g., 0 */2 * * *)"
-                  className="mt-2 w-full bg-slate-800/80 border border-slate-600/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none font-mono text-sm"
+                  className="mt-2 w-full bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-slate-500 focus:border-indigo-500 focus:outline-none font-mono text-sm"
                 />
               )}
             </div>
@@ -587,7 +587,7 @@ export default function ScheduleManager() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white px-5 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors"
+                className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-gray-900 dark:text-white px-5 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors"
               >
                 {saving && <Spinner />}
                 {editingId ? "Update" : "Create"} Schedule
@@ -597,7 +597,7 @@ export default function ScheduleManager() {
                   setShowForm(false);
                   setEditingId(null);
                 }}
-                className="bg-slate-700 hover:bg-slate-600 text-white px-5 py-2 rounded-lg font-medium transition-colors"
+                className="bg-slate-700 hover:bg-slate-600 text-gray-900 dark:text-white px-5 py-2 rounded-lg font-medium transition-colors"
               >
                 Cancel
               </button>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useData } from "../context/DataContext.jsx";
+import { useNotifications } from "../context/NotificationContext.jsx";
 import { fmt, STATUS_COLORS, STATUS_TEXT, GMB_COLORS, NICHE_COLORS } from "../utils/formatters.js";
 import { NICHES } from "../data/seedData.js";
 
@@ -53,6 +54,7 @@ function EditableField({ label, value, type = "text", onSave, options }) {
 
 export default function StoreDetail({ store, onClose }) {
   const { updateStore, updateChecklist, getChecklist, addNote, storeNotes } = useData();
+  const { notify } = useNotifications();
   const [noteText, setNoteText] = useState("");
   const [activeSection, setActiveSection] = useState("details");
 
@@ -63,12 +65,19 @@ export default function StoreDetail({ store, onClose }) {
 
   function handleUpdate(field, value) {
     updateStore(store.store_id, { [field]: value });
+    notify("Store updated", "success");
   }
 
   function handleAddNote() {
     if (!noteText.trim()) return;
     addNote(store.store_id, noteText.trim());
     setNoteText("");
+    notify("Note added", "success");
+  }
+
+  function handleChecklist(key, value) {
+    updateChecklist(store.store_id, key, value);
+    notify(`Checklist item ${value ? "completed" : "unchecked"}`, "info");
   }
 
   const sections = ["details", "checklist", "notes"];
@@ -161,7 +170,7 @@ export default function StoreDetail({ store, onClose }) {
                   <input
                     type="checkbox"
                     checked={checklist[item.key] || false}
-                    onChange={(e) => updateChecklist(store.store_id, item.key, e.target.checked)}
+                    onChange={(e) => handleChecklist(item.key, e.target.checked)}
                     className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-indigo-500 focus:ring-indigo-500 focus:ring-offset-0"
                   />
                   <span className={`text-sm ${checklist[item.key] ? "text-green-400 line-through" : "text-gray-300"}`}>

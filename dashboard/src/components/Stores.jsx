@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useData } from "../context/DataContext.jsx";
+import { useNotifications } from "../context/NotificationContext.jsx";
 import { NICHES } from "../data/seedData.js";
 import { fmt, STATUS_COLORS, STATUS_TEXT, GMB_COLORS, NICHE_COLORS } from "../utils/formatters.js";
 import { exportCSV } from "../hooks/useStorage.js";
@@ -26,6 +27,7 @@ function GmbBadge({ status }) {
 
 export default function Stores({ filters }) {
   const { stores, bulkUpdateStores, deleteStore } = useData();
+  const { notify } = useNotifications();
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("rev_7d");
   const [sortDir, setSortDir] = useState("desc");
@@ -87,12 +89,13 @@ export default function Stores({ filters }) {
     const ids = [...selected];
     if (ids.length === 0) return;
     switch (action) {
-      case "pause": bulkUpdateStores(ids, { status: "paused" }); break;
-      case "resume": bulkUpdateStores(ids, { status: "live" }); break;
-      case "flag": bulkUpdateStores(ids, { shopify_flagged: true }); break;
-      case "kill": bulkUpdateStores(ids, { status: "dead" }); break;
+      case "pause": bulkUpdateStores(ids, { status: "paused" }); notify(`${ids.length} store(s) paused`, "info"); break;
+      case "resume": bulkUpdateStores(ids, { status: "live" }); notify(`${ids.length} store(s) resumed`, "success"); break;
+      case "flag": bulkUpdateStores(ids, { shopify_flagged: true }); notify(`${ids.length} store(s) flagged for review`, "warning"); break;
+      case "kill": bulkUpdateStores(ids, { status: "dead" }); notify(`${ids.length} store(s) marked as dead`, "warning"); break;
       case "export":
         exportCSV(stores.filter((s) => ids.includes(s.store_id)), "stores-export.csv");
+        notify(`${ids.length} store(s) exported to CSV`, "success");
         break;
     }
     setSelected(new Set());
@@ -103,6 +106,7 @@ export default function Stores({ filters }) {
     exportCSV(sorted.map(({ store_id, brand_name, domain, city, province, niche, status, gmb_status, rev_7d, orders_7d, aov, refund_rate, days_live, blog_posts_count, products_count }) =>
       ({ store_id, brand_name, domain, city, province, niche, status, gmb_status, rev_7d, orders_7d, aov, refund_rate, days_live, blog_posts_count, products_count })
     ), "all-stores.csv");
+    notify(`${sorted.length} stores exported to CSV`, "success");
   }
 
   // When user clicks a store in the list, find the latest version from context

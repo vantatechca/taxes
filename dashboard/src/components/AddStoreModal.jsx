@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useData } from "../context/DataContext.jsx";
+import { useNotifications } from "../context/NotificationContext.jsx";
 import { NICHES, CITIES } from "../data/seedData.js";
 
 const PROVINCES = [...new Set(CITIES.map((c) => c.province))].sort();
 
 export default function AddStoreModal({ onClose }) {
   const { addStore } = useData();
+  const { notify } = useNotifications();
   const [form, setForm] = useState({
     niche_id: "1",
     city: CITIES[0].name,
@@ -57,6 +59,7 @@ export default function AddStoreModal({ onClose }) {
     };
 
     addStore(store);
+    notify(`Store "${store.brand_name}" created successfully!`, "success");
     onClose();
   }
 

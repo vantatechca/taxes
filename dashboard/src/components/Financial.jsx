@@ -4,6 +4,7 @@ import {
   ResponsiveContainer, PieChart, Pie, Cell, ReferenceLine
 } from "recharts";
 import { useData } from "../context/DataContext.jsx";
+import { useNotifications } from "../context/NotificationContext.jsx";
 import { getRevenueTrend } from "../data/seedData.js";
 import { fmt } from "../utils/formatters.js";
 
@@ -12,10 +13,12 @@ const EXPENSE_COLORS = ["#6366f1", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6", "
 function EditableCost({ label, value, onChange, suffix = "/mo" }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value);
+  const { notify } = useNotifications();
 
   function save() {
     onChange(parseFloat(draft) || 0);
     setEditing(false);
+    notify(`${label} updated`, "success");
   }
 
   if (editing) {
@@ -149,7 +152,7 @@ export default function Financial() {
             <BarChart data={plData}>
               <XAxis dataKey="month" tick={{ fill: "#6b7280", fontSize: 11 }} tickLine={false} />
               <YAxis tick={{ fill: "#6b7280", fontSize: 10 }} tickLine={false} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} formatter={(val, name) => [`$${val.toLocaleString()}`, name]} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} formatter={(val, name) => [`$${val.toLocaleString()}`, name]} />
               <ReferenceLine y={0} stroke="#374151" />
               <Bar dataKey="revenue" name="Revenue" fill="#6366f1" radius={[4, 4, 0, 0]} />
               <Bar dataKey="expenses" name="Expenses" fill="#ef4444" radius={[4, 4, 0, 0]} opacity={0.7} />
@@ -165,7 +168,7 @@ export default function Financial() {
               <Pie data={expenseData} cx="50%" cy="50%" innerRadius={35} outerRadius={55} paddingAngle={2} dataKey="value">
                 {expenseData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
               </Pie>
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} formatter={(val) => [`$${val.toLocaleString()}`, ""]} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} formatter={(val) => [`$${val.toLocaleString()}`, ""]} />
             </PieChart>
           </ResponsiveContainer>
           <div className="space-y-1 mt-1">
@@ -231,7 +234,7 @@ export default function Financial() {
             <BarChart data={histogram}>
               <XAxis dataKey="label" tick={{ fill: "#6b7280", fontSize: 10 }} tickLine={false} />
               <YAxis tick={{ fill: "#6b7280", fontSize: 10 }} tickLine={false} />
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} formatter={(val) => [val + " stores", "Count"]} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} formatter={(val) => [val + " stores", "Count"]} />
               <ReferenceLine x={`$${Math.round(breakEvenPerStore)}`} stroke="#ef4444" strokeDasharray="3 3" label={{ value: "BE", fill: "#ef4444", fontSize: 10 }} />
               <Bar dataKey="count" fill="#6366f1" radius={[4, 4, 0, 0]} />
             </BarChart>

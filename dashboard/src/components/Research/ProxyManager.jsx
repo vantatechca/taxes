@@ -221,34 +221,34 @@ export default function ProxyManager() {
       {/* Stats Bar */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-gray-900 rounded-2xl p-4 border border-slate-700/40 text-center">
-          <p className="text-xs text-slate-400 mb-1">Total Proxies</p>
-          <p className="text-2xl font-bold text-white">{stats.total}</p>
+          <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Total Proxies</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
         </div>
         <div className="bg-gray-900 rounded-2xl p-4 border border-slate-700/40 text-center">
-          <p className="text-xs text-slate-400 mb-1">Working</p>
+          <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Working</p>
           <p className="text-2xl font-bold text-green-400">{stats.working}</p>
         </div>
         <div className="bg-gray-900 rounded-2xl p-4 border border-slate-700/40 text-center">
-          <p className="text-xs text-slate-400 mb-1">Failed</p>
+          <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Failed</p>
           <p className="text-2xl font-bold text-red-400">{stats.failed}</p>
         </div>
         <div className="bg-gray-900 rounded-2xl p-4 border border-slate-700/40 text-center">
-          <p className="text-xs text-slate-400 mb-1">Avg Latency</p>
-          <p className="text-2xl font-bold text-white">
+          <p className="text-xs text-gray-500 dark:text-slate-400 mb-1">Avg Latency</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">
             {stats.avgLatency > 0 ? `${stats.avgLatency}ms` : "-"}
           </p>
         </div>
       </div>
 
       {/* Bulk Add */}
-      <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-        <h2 className="text-lg font-semibold text-white mb-4">Add Proxies</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Add Proxies</h2>
         <textarea
           value={bulkText}
           onChange={(e) => setBulkText(e.target.value)}
           placeholder={"Paste proxies, one per line\nFormat: ip:port or ip:port:user:pass or http://user:pass@ip:port"}
           rows={5}
-          className="w-full bg-slate-800/80 border border-slate-600/50 rounded-lg px-4 py-3 text-sm text-gray-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none resize-none font-mono"
+          className="w-full bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-4 py-3 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-slate-500 focus:border-indigo-500 focus:outline-none resize-none font-mono"
         />
         <div className="flex items-center justify-between mt-3">
           <span className="text-xs text-slate-500">
@@ -257,7 +257,7 @@ export default function ProxyManager() {
           <button
             onClick={handleBulkAdd}
             disabled={adding || bulkCount === 0}
-            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-5 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors text-sm"
+            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 dark:text-white px-5 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors text-sm"
           >
             {adding ? (
               <>
@@ -272,16 +272,16 @@ export default function ProxyManager() {
       </div>
 
       {/* Bulk Actions */}
-      <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-white">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             Proxy List ({proxies.length})
           </h2>
           <div className="flex items-center gap-2">
             <button
               onClick={handleTestAll}
               disabled={testingAll || proxies.length === 0}
-              className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+              className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
             >
               {testingAll ? <Spinner /> : null}
               Test All
@@ -289,7 +289,7 @@ export default function ProxyManager() {
             <button
               onClick={handleRemoveFailed}
               disabled={stats.failed === 0}
-              className="bg-red-600 hover:bg-red-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              className="bg-red-600 hover:bg-red-500 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
             >
               Remove Failed ({stats.failed})
             </button>
@@ -305,7 +305,7 @@ export default function ProxyManager() {
                 style={{ width: `${testProgress}%` }}
               />
             </div>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
               Testing proxies... {testProgress}%
             </p>
           </div>
@@ -313,13 +313,13 @@ export default function ProxyManager() {
 
         {/* Proxy Table */}
         {proxies.length === 0 ? (
-          <p className="text-sm text-slate-500 py-4 mt-2">No proxies added yet.</p>
+          <p className="text-sm text-gray-400 dark:text-slate-500 py-4 mt-2">No proxies added yet.</p>
         ) : (
           <>
             <div className="overflow-x-auto mt-4">
               <table className="w-full text-sm text-gray-300">
                 <thead>
-                  <tr className="text-xs text-slate-500 uppercase tracking-wide border-b border-slate-700/40">
+                  <tr className="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wide border-b border-slate-700/40">
                     <th className="text-left py-3 px-2 w-8">#</th>
                     <th className="text-left py-3 px-2">Proxy</th>
                     <th className="text-center py-3 px-2">Type</th>
@@ -406,7 +406,7 @@ export default function ProxyManager() {
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-white px-3 py-1.5 rounded-lg text-xs transition-colors"
+                  className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-gray-900 dark:text-white px-3 py-1.5 rounded-lg text-xs transition-colors"
                 >
                   Previous
                 </button>
@@ -416,7 +416,7 @@ export default function ProxyManager() {
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-white px-3 py-1.5 rounded-lg text-xs transition-colors"
+                  className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-gray-900 dark:text-white px-3 py-1.5 rounded-lg text-xs transition-colors"
                 >
                   Next
                 </button>

@@ -81,7 +81,7 @@ function ShimmerCard() {
 function SectionHeader({ icon, title, right }) {
   return (
     <div className="flex items-center justify-between mb-5">
-      <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
         <span>{icon}</span> {title}
       </h2>
       {right}
@@ -588,8 +588,8 @@ export default function TrendRadar() {
             onClick={() => setActiveSection(item.id)}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
               activeSection === item.id
-                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
-                : "bg-slate-800 text-slate-400 hover:bg-slate-700/70 hover:text-slate-200"
+                ? "bg-indigo-600 text-gray-900 dark:text-white shadow-lg shadow-indigo-600/20"
+                : "bg-slate-800 text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:bg-slate-700/70 hover:text-gray-900 dark:hover:text-slate-200"
             }`}
           >
             {item.icon} {item.label}
@@ -600,7 +600,7 @@ export default function TrendRadar() {
       {/* ════════════ SECTION 1: NICHE PULSE ════════════ */}
       {activeSection === "pulse" && (
         <div className="space-y-5">
-          <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
             <SectionHeader
               icon="📊"
               title="Niche Pulse"
@@ -615,7 +615,7 @@ export default function TrendRadar() {
                   <button
                     onClick={scanAllNiches}
                     disabled={scanAllLoading}
-                    className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+                    className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
                   >
                     {scanAllLoading ? <Spinner /> : null}
                     {scanAllLoading ? "Scanning..." : "Scan All Niches"}
@@ -666,7 +666,7 @@ export default function TrendRadar() {
                     {data?.hotKeywords?.length > 0 && (
                       <div className="flex flex-wrap gap-1.5">
                         {data.hotKeywords.map((kw, i) => (
-                          <span key={i} className="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full truncate max-w-[120px]">
+                          <span key={i} className="text-[10px] bg-slate-800 text-gray-500 dark:text-slate-400 px-2 py-0.5 rounded-full truncate max-w-[120px]">
                             {kw}
                           </span>
                         ))}
@@ -674,7 +674,7 @@ export default function TrendRadar() {
                     )}
 
                     {!data && !isLoading && (
-                      <p className="text-xs text-slate-600 mt-2">Click "Scan All" or click here to scan</p>
+                      <p className="text-xs text-gray-500 dark:text-slate-600 mt-2">Click "Scan All" or click here to scan</p>
                     )}
                   </button>
                 );
@@ -688,7 +688,7 @@ export default function TrendRadar() {
       {activeSection === "deepdive" && (
         <div className="space-y-5" ref={deepDiveRef}>
           {/* Search Controls */}
-          <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
             <SectionHeader icon="🔬" title="Deep Dive" />
 
             <div className="flex flex-col sm:flex-row gap-3">
@@ -701,15 +701,15 @@ export default function TrendRadar() {
                   onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                   onKeyDown={e => e.key === "Enter" && (setShowSuggestions(false), handleDeepDive())}
                   placeholder="Enter a keyword or select a niche..."
-                  className="w-full bg-slate-800/80 border border-slate-600/50 rounded-lg px-4 py-2.5 text-gray-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  className="w-full bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-4 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
                 />
                 {showSuggestions && filteredSuggestions.length > 0 && (
-                  <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-slate-800/80 border border-slate-600/50 rounded-lg max-h-48 overflow-y-auto shadow-xl">
+                  <div className="absolute z-20 top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg max-h-48 overflow-y-auto shadow-xl">
                     {filteredSuggestions.map(kw => (
                       <button
                         key={kw}
                         onMouseDown={() => { setDdKeyword(kw); setShowSuggestions(false); }}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-slate-700/70 hover:text-white transition-colors"
+                        className="w-full text-left px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:bg-slate-700/70 hover:text-gray-900 dark:hover:text-white transition-colors"
                       >
                         {kw}
                       </button>
@@ -721,7 +721,7 @@ export default function TrendRadar() {
               <select
                 value={ddRegion}
                 onChange={e => setDdRegion(e.target.value)}
-                className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-indigo-500"
+                className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-2.5 text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-indigo-500"
               >
                 <option value="US">United States</option>
                 <option value="CA">Canada</option>
@@ -731,7 +731,7 @@ export default function TrendRadar() {
               <button
                 onClick={() => handleDeepDive()}
                 disabled={ddLoading || !ddKeyword.trim()}
-                className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors whitespace-nowrap"
+                className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 dark:text-white px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors whitespace-nowrap"
               >
                 {ddLoading ? <Spinner /> : <span>📈</span>}
                 Check Trend
@@ -740,7 +740,7 @@ export default function TrendRadar() {
               <button
                 onClick={() => handleRelated()}
                 disabled={relatedLoading || !ddKeyword.trim()}
-                className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors whitespace-nowrap"
+                className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 dark:text-white px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors whitespace-nowrap"
               >
                 {relatedLoading ? <Spinner /> : <span>🔗</span>}
                 Related Queries
@@ -750,16 +750,16 @@ export default function TrendRadar() {
 
           {/* Trend Chart */}
           {ddLoading && (
-            <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40 animate-pulse">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40 animate-pulse">
               <div className="h-4 w-48 bg-slate-700 rounded mb-6" />
               <div className="h-72 bg-slate-800 rounded-xl" />
             </div>
           )}
 
           {ddTimeline.length > 0 && !ddLoading && (
-            <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-base font-semibold text-white">
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                   Interest Over Time: "{ddKeyword}"
                 </h3>
                 {ddDirection && <TrendDirectionBadge direction={ddDirection} />}
@@ -819,26 +819,26 @@ export default function TrendRadar() {
           {ddData && !ddLoading && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-gray-900 rounded-2xl p-5 border border-slate-700/40 text-center">
-                <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">Average Interest</p>
-                <p className="text-3xl font-bold text-white">{ddAvg}</p>
-                <p className="text-xs text-slate-500 mt-1">out of 100</p>
+                <p className="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wide mb-1">Average Interest</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-white">{ddAvg}</p>
+                <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">out of 100</p>
               </div>
               <div className="bg-gray-900 rounded-2xl p-5 border border-slate-700/40 text-center">
-                <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">Peak Month</p>
-                <p className="text-lg font-semibold text-white mt-2">{ddPeak}</p>
+                <p className="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wide mb-1">Peak Month</p>
+                <p className="text-lg font-semibold text-gray-900 dark:text-white mt-2">{ddPeak}</p>
               </div>
               <div className="bg-gray-900 rounded-2xl p-5 border border-slate-700/40 text-center">
-                <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">Trend Direction</p>
+                <p className="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wide mb-1">Trend Direction</p>
                 <div className="mt-2">{ddDirection && <TrendDirectionBadge direction={ddDirection} />}</div>
               </div>
               <div className="bg-gray-900 rounded-2xl p-5 border border-slate-700/40 text-center">
-                <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">6-Month Change</p>
+                <p className="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wide mb-1">6-Month Change</p>
                 {ddYoY != null ? (
                   <p className={`text-2xl font-bold ${ddYoY > 0 ? "text-green-400" : ddYoY < 0 ? "text-red-400" : "text-slate-400"}`}>
                     {ddYoY > 0 ? "+" : ""}{ddYoY}%
                   </p>
                 ) : (
-                  <p className="text-lg text-slate-600 mt-2">N/A</p>
+                  <p className="text-lg text-gray-500 dark:text-slate-600 mt-2">N/A</p>
                 )}
               </div>
             </div>
@@ -846,15 +846,15 @@ export default function TrendRadar() {
 
           {/* Longevity Analysis */}
           {ddData && !ddLoading && (
-            <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-base font-semibold text-white flex items-center gap-2">
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                   <span>🧬</span> Longevity Classification
                 </h3>
                 <button
                   onClick={handleLongevity}
                   disabled={ddLongevityLoading || !ddKeyword.trim()}
-                  className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors text-sm"
+                  className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 dark:text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors text-sm"
                 >
                   {ddLongevityLoading ? <Spinner /> : <span>📊</span>}
                   Analyze Longevity
@@ -880,26 +880,26 @@ export default function TrendRadar() {
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <span className="text-sm text-slate-400 w-20">Confidence</span>
+                      <span className="text-sm text-gray-500 dark:text-slate-400 w-20">Confidence</span>
                       <div className="flex-1 bg-slate-800 rounded-full h-3 max-w-sm overflow-hidden">
                         <div
                           className="bg-indigo-500 h-3 rounded-full transition-all duration-700"
                           style={{ width: `${confidence}%` }}
                         />
                       </div>
-                      <span className="text-sm font-semibold text-white w-12 text-right">{confidence}%</span>
+                      <span className="text-sm font-semibold text-gray-900 dark:text-white w-12 text-right">{confidence}%</span>
                     </div>
 
                     {ddLongevity.reasoning && (
                       <div className="bg-slate-800 rounded-xl p-4">
-                        <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">Reasoning</p>
-                        <p className="text-sm text-gray-300 leading-relaxed">{ddLongevity.reasoning}</p>
+                        <p className="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wide mb-1">Reasoning</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{ddLongevity.reasoning}</p>
                       </div>
                     )}
 
                     <div className="bg-slate-800 rounded-xl p-4">
-                      <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">Recommendation</p>
-                      <p className="text-sm text-gray-300 leading-relaxed">{config.rec}</p>
+                      <p className="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wide mb-1">Recommendation</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{config.rec}</p>
                     </div>
                   </div>
                 );
@@ -918,7 +918,7 @@ export default function TrendRadar() {
       {/* ════════════ SECTION 3: RELATED QUERIES & TOPICS ════════════ */}
       {activeSection === "related" && (
         <div className="space-y-5">
-          <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
             <SectionHeader icon="🔗" title={`Related Queries & Topics${ddKeyword ? `: "${ddKeyword}"` : ""}`} />
 
             {!relatedData && !relatedLoading && (
@@ -926,7 +926,7 @@ export default function TrendRadar() {
                 <p className="text-slate-500 mb-4">Search for a keyword first, then click "Related Queries" to see related data.</p>
                 <button
                   onClick={() => setActiveSection("deepdive")}
-                  className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm transition-colors"
+                  className="bg-slate-700 hover:bg-slate-600 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm transition-colors"
                 >
                   Go to Deep Dive
                 </button>
@@ -950,14 +950,14 @@ export default function TrendRadar() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {/* Top Queries */}
                 <div>
-                  <h3 className="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider">Top Queries</h3>
+                  <h3 className="text-xs font-semibold text-gray-500 dark:text-slate-400 mb-3 uppercase tracking-wider">Top Queries</h3>
                   <div className="space-y-2">
                     {(relatedData.topQueries || relatedData.top || []).map((q, i) => {
                       const text = q.query || q.keyword || q;
                       const val = q.value || q.score || "";
                       return (
                         <div key={i} className="bg-slate-800 rounded-lg px-3 py-2 flex items-center justify-between group">
-                          <span className="text-sm text-gray-300 truncate flex-1 mr-2">{text}</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-300 truncate flex-1 mr-2">{text}</span>
                           <div className="flex items-center gap-2 shrink-0">
                             <span className="text-xs text-slate-500">{val}</span>
                             <div className="hidden group-hover:flex gap-1">
@@ -988,7 +988,7 @@ export default function TrendRadar() {
 
                 {/* Rising Queries */}
                 <div>
-                  <h3 className="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider">Rising Queries</h3>
+                  <h3 className="text-xs font-semibold text-gray-500 dark:text-slate-400 mb-3 uppercase tracking-wider">Rising Queries</h3>
                   <div className="space-y-2">
                     {(relatedData.risingQueries || relatedData.rising || []).map((q, i) => {
                       const text = q.query || q.keyword || q;
@@ -996,7 +996,7 @@ export default function TrendRadar() {
                       const isBreakout = val === "Breakout" || val === "breakout";
                       return (
                         <div key={i} className="bg-slate-800 rounded-lg px-3 py-2 flex items-center justify-between group">
-                          <span className="text-sm text-gray-300 truncate flex-1 mr-2">{text}</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-300 truncate flex-1 mr-2">{text}</span>
                           <div className="flex items-center gap-2 shrink-0">
                             <span className={`text-xs font-medium ${isBreakout ? "text-green-300 bg-green-900/40 px-1.5 py-0.5 rounded" : "text-green-400"}`}>
                               {isBreakout ? "Breakout" : `${val}${typeof val === "number" ? "%" : ""}`}
@@ -1027,14 +1027,14 @@ export default function TrendRadar() {
 
                 {/* Top Topics */}
                 <div>
-                  <h3 className="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider">Top Topics</h3>
+                  <h3 className="text-xs font-semibold text-gray-500 dark:text-slate-400 mb-3 uppercase tracking-wider">Top Topics</h3>
                   <div className="space-y-2">
                     {(relatedData.topTopics || []).map((t, i) => {
                       const text = t.topic || t.title || t;
                       const val = t.value || t.score || "";
                       return (
                         <div key={i} className="bg-slate-800 rounded-lg px-3 py-2 flex items-center justify-between group">
-                          <span className="text-sm text-gray-300 truncate flex-1 mr-2">{text}</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-300 truncate flex-1 mr-2">{text}</span>
                           <div className="flex items-center gap-2 shrink-0">
                             <span className="text-xs text-slate-500">{val}</span>
                             <button
@@ -1055,7 +1055,7 @@ export default function TrendRadar() {
 
                 {/* Rising Topics */}
                 <div>
-                  <h3 className="text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider">Rising Topics</h3>
+                  <h3 className="text-xs font-semibold text-gray-500 dark:text-slate-400 mb-3 uppercase tracking-wider">Rising Topics</h3>
                   <div className="space-y-2">
                     {(relatedData.risingTopics || []).map((t, i) => {
                       const text = t.topic || t.title || t;
@@ -1063,7 +1063,7 @@ export default function TrendRadar() {
                       const isBreakout = val === "Breakout" || val === "breakout";
                       return (
                         <div key={i} className="bg-slate-800 rounded-lg px-3 py-2 flex items-center justify-between group">
-                          <span className="text-sm text-gray-300 truncate flex-1 mr-2">{text}</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-300 truncate flex-1 mr-2">{text}</span>
                           <div className="flex items-center gap-2 shrink-0">
                             <span className={`text-xs font-medium ${isBreakout ? "text-green-300 bg-green-900/40 px-1.5 py-0.5 rounded" : "text-green-400"}`}>
                               {isBreakout ? "Breakout" : `${val}${typeof val === "number" ? "%" : ""}`}
@@ -1092,7 +1092,7 @@ export default function TrendRadar() {
       {/* ════════════ SECTION 4: COMPARE KEYWORDS ════════════ */}
       {activeSection === "compare" && (
         <div className="space-y-5">
-          <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
             <SectionHeader icon="⚖️" title="Compare Keywords" />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-4">
@@ -1111,7 +1111,7 @@ export default function TrendRadar() {
                       setCompareKeywords(next);
                     }}
                     placeholder={`Keyword ${i + 1}`}
-                    className="w-full bg-slate-800/80 border border-slate-600/50 rounded-lg pl-4 pr-3 py-2.5 text-sm text-gray-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                    className="w-full bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg pl-4 pr-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
                   />
                 </div>
               ))}
@@ -1120,7 +1120,7 @@ export default function TrendRadar() {
             <button
               onClick={handleCompare}
               disabled={compareLoading || activeCompareKeywords.length < 2}
-              className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors text-sm"
+              className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 dark:text-white px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors text-sm"
             >
               {compareLoading ? <Spinner /> : <span>📊</span>}
               {compareLoading ? "Comparing..." : "Compare"}
@@ -1129,14 +1129,14 @@ export default function TrendRadar() {
 
           {/* Compare Chart */}
           {compareLoading && (
-            <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40 animate-pulse">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40 animate-pulse">
               <div className="h-72 bg-slate-800 rounded-xl" />
             </div>
           )}
 
           {compareChartPoints.length > 0 && !compareLoading && (
-            <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-              <h3 className="text-base font-semibold text-white mb-4">Keyword Comparison</h3>
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">Keyword Comparison</h3>
               <div className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={compareChartPoints}>
@@ -1194,8 +1194,8 @@ export default function TrendRadar() {
 
           {/* Comparison Table */}
           {compareMeta.length > 0 && !compareLoading && (
-            <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40 overflow-x-auto">
-              <h3 className="text-base font-semibold text-white mb-4">Comparison Details</h3>
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40 overflow-x-auto">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">Comparison Details</h3>
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-slate-500 text-xs uppercase tracking-wider border-b border-slate-700/40">
@@ -1212,7 +1212,7 @@ export default function TrendRadar() {
                     const isBest = m.keyword === best.keyword;
                     return (
                       <tr key={i} className={`border-b border-slate-700/40/50 ${isBest ? "bg-indigo-900/10" : ""}`}>
-                        <td className="py-3 pr-4 text-gray-200 font-medium flex items-center gap-2">
+                        <td className="py-3 pr-4 text-gray-800 dark:text-gray-200 font-medium flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full" style={{ backgroundColor: COMPARE_COLORS[i] }} />
                           {m.keyword}
                           {isBest && <span className="text-yellow-400 text-xs">🏆</span>}
@@ -1248,7 +1248,7 @@ export default function TrendRadar() {
       {/* ════════════ SECTION 5: OPPORTUNITY MATRIX ════════════ */}
       {activeSection === "matrix" && (
         <div className="space-y-5">
-          <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
             <SectionHeader
               icon="🎯"
               title="Opportunity Matrix"
@@ -1262,7 +1262,7 @@ export default function TrendRadar() {
                   <button
                     onClick={generateMatrix}
                     disabled={matrixLoading}
-                    className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+                    className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
                   >
                     {matrixLoading ? <Spinner /> : <span>🎯</span>}
                     {matrixLoading ? "Generating..." : Object.keys(matrixData).length > 0 ? "Refresh Matrix" : "Generate Opportunity Matrix"}
@@ -1288,7 +1288,7 @@ export default function TrendRadar() {
                 <p className="text-4xl mb-3">🎯</p>
                 <p className="text-slate-400 mb-2">Cross-reference all 12 niches with 7 product types</p>
                 <p className="text-sm text-slate-600">Click "Generate Opportunity Matrix" to build a {NICHES.length * PRODUCT_TYPES.length}-cell heatmap of trend scores.</p>
-                <p className="text-xs text-slate-600 mt-1">This will make ~{NICHES.length * PRODUCT_TYPES.length} API calls and may take a few minutes.</p>
+                <p className="text-xs text-gray-500 dark:text-slate-600 mt-1">This will make ~{NICHES.length * PRODUCT_TYPES.length} API calls and may take a few minutes.</p>
               </div>
             )}
 
@@ -1303,16 +1303,16 @@ export default function TrendRadar() {
                 <table className="w-full text-xs">
                   <thead>
                     <tr>
-                      <th className="text-left pb-2 pr-3 text-slate-500 uppercase tracking-wider font-medium sticky left-0 bg-gray-900 z-10">Niche</th>
+                      <th className="text-left pb-2 pr-3 text-gray-400 dark:text-slate-500 uppercase tracking-wider font-medium sticky left-0 bg-white dark:bg-gray-900 z-10">Niche</th>
                       {PRODUCT_TYPES.map(pt => (
-                        <th key={pt} className="text-center pb-2 px-2 text-slate-500 uppercase tracking-wider font-medium whitespace-nowrap">{pt}</th>
+                        <th key={pt} className="text-center pb-2 px-2 text-gray-400 dark:text-slate-500 uppercase tracking-wider font-medium whitespace-nowrap">{pt}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {NICHES.map(niche => (
                       <tr key={niche.id} className="border-t border-slate-700/40/30">
-                        <td className="py-1.5 pr-3 text-gray-300 font-medium whitespace-nowrap sticky left-0 bg-gray-900 z-10">
+                        <td className="py-1.5 pr-3 text-gray-600 dark:text-gray-300 font-medium whitespace-nowrap sticky left-0 bg-white dark:bg-gray-900 z-10">
                           {niche.emoji} {niche.name}
                         </td>
                         {PRODUCT_TYPES.map(pt => {
@@ -1336,7 +1336,7 @@ export default function TrendRadar() {
                                   <div className="text-center">
                                     <span className="text-white font-bold text-xs">{score}</span>
                                     {cell?.direction && (
-                                      <span className="block text-[8px] text-gray-300 -mt-0.5">
+                                      <span className="block text-[8px] text-gray-600 dark:text-gray-300 -mt-0.5">
                                         {cell.direction === "rising" ? "↗" : cell.direction === "fading" ? "↘" : "→"}
                                       </span>
                                     )}
@@ -1363,15 +1363,15 @@ export default function TrendRadar() {
         <div className="space-y-5">
           {/* No data state */}
           {trendingNow.hot.length === 0 && trendingNow.steady.length === 0 && trendingNow.watchList.length === 0 && trendingNow.opportunities.length === 0 && (
-            <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40 text-center py-16">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40 text-center py-16">
               <p className="text-4xl mb-3">🔥</p>
               <p className="text-slate-400 mb-2">No trend data yet</p>
-              <p className="text-sm text-slate-600 mb-4">
+              <p className="text-sm text-gray-500 dark:text-slate-600 mb-4">
                 Scan niches and generate the opportunity matrix first to populate this section.
               </p>
               <button
                 onClick={() => setActiveSection("pulse")}
-                className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                className="bg-indigo-600 hover:bg-indigo-500 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
               >
                 Go to Niche Pulse
               </button>
@@ -1381,8 +1381,8 @@ export default function TrendRadar() {
           {(trendingNow.hot.length > 0 || trendingNow.steady.length > 0 || trendingNow.watchList.length > 0 || trendingNow.opportunities.length > 0) && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               {/* Hot Right Now */}
-              <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-                <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+              <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                   <span className="text-lg">🔥</span> Hot Right Now
                 </h3>
                 {trendingNow.hot.length === 0 && <p className="text-xs text-slate-600">No hot niches detected yet</p>}
@@ -1391,12 +1391,12 @@ export default function TrendRadar() {
                     <button
                       key={i}
                       onClick={() => loadKeywordIntoDeepDive(item.keyword)}
-                      className="w-full text-left bg-slate-800 hover:bg-slate-700/80 rounded-lg px-4 py-3 flex items-center justify-between transition-colors hover:ring-1 hover:ring-indigo-500/30"
+                      className="w-full text-left bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700/80 rounded-lg px-4 py-3 flex items-center justify-between transition-colors hover:ring-1 hover:ring-indigo-500/30"
                     >
                       <div className="flex items-center gap-3">
                         <span>{item.emoji}</span>
                         <div>
-                          <p className="text-sm text-gray-200 font-medium">{item.niche}</p>
+                          <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{item.niche}</p>
                           <p className="text-xs text-slate-500">{item.keyword}</p>
                         </div>
                       </div>
@@ -1410,8 +1410,8 @@ export default function TrendRadar() {
               </div>
 
               {/* Steady Winners */}
-              <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-                <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+              <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                   <span className="text-lg">📈</span> Steady Winners
                 </h3>
                 {trendingNow.steady.length === 0 && <p className="text-xs text-slate-600">No steady winners detected yet</p>}
@@ -1420,12 +1420,12 @@ export default function TrendRadar() {
                     <button
                       key={i}
                       onClick={() => loadKeywordIntoDeepDive(item.keyword)}
-                      className="w-full text-left bg-slate-800 hover:bg-slate-700/80 rounded-lg px-4 py-3 flex items-center justify-between transition-colors hover:ring-1 hover:ring-indigo-500/30"
+                      className="w-full text-left bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700/80 rounded-lg px-4 py-3 flex items-center justify-between transition-colors hover:ring-1 hover:ring-indigo-500/30"
                     >
                       <div className="flex items-center gap-3">
                         <span>{item.emoji}</span>
                         <div>
-                          <p className="text-sm text-gray-200 font-medium">{item.niche}</p>
+                          <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{item.niche}</p>
                           <p className="text-xs text-slate-500">{item.keyword}</p>
                         </div>
                       </div>
@@ -1439,8 +1439,8 @@ export default function TrendRadar() {
               </div>
 
               {/* Watch List */}
-              <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-                <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+              <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                   <span className="text-lg">⚠️</span> Watch List
                 </h3>
                 {trendingNow.watchList.length === 0 && <p className="text-xs text-slate-600">No declining niches detected</p>}
@@ -1449,12 +1449,12 @@ export default function TrendRadar() {
                     <button
                       key={i}
                       onClick={() => loadKeywordIntoDeepDive(item.keyword)}
-                      className="w-full text-left bg-slate-800 hover:bg-slate-700/80 rounded-lg px-4 py-3 flex items-center justify-between transition-colors hover:ring-1 hover:ring-red-500/30"
+                      className="w-full text-left bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700/80 rounded-lg px-4 py-3 flex items-center justify-between transition-colors hover:ring-1 hover:ring-red-500/30"
                     >
                       <div className="flex items-center gap-3">
                         <span>{item.emoji}</span>
                         <div>
-                          <p className="text-sm text-gray-200 font-medium">{item.niche}</p>
+                          <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{item.niche}</p>
                           <p className="text-xs text-slate-500">{item.keyword}</p>
                         </div>
                       </div>
@@ -1468,13 +1468,13 @@ export default function TrendRadar() {
               </div>
 
               {/* Opportunities */}
-              <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-                <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+              <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                   <span className="text-lg">💡</span> Opportunities
                 </h3>
                 {trendingNow.opportunities.length === 0 && (
                   <div>
-                    <p className="text-xs text-slate-600 mb-2">No opportunities detected yet</p>
+                    <p className="text-xs text-gray-500 dark:text-slate-600 mb-2">No opportunities detected yet</p>
                     <p className="text-xs text-slate-600">Generate the Opportunity Matrix to find niche + product type combos that are trending up.</p>
                   </div>
                 )}
@@ -1483,12 +1483,12 @@ export default function TrendRadar() {
                     <button
                       key={i}
                       onClick={() => loadKeywordIntoDeepDive(item.keyword)}
-                      className="w-full text-left bg-slate-800 hover:bg-slate-700/80 rounded-lg px-4 py-3 flex items-center justify-between transition-colors hover:ring-1 hover:ring-yellow-500/30"
+                      className="w-full text-left bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700/80 rounded-lg px-4 py-3 flex items-center justify-between transition-colors hover:ring-1 hover:ring-yellow-500/30"
                     >
                       <div className="flex items-center gap-3">
                         <span>{item.emoji}</span>
                         <div>
-                          <p className="text-sm text-gray-200 font-medium">{item.niche}</p>
+                          <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{item.niche}</p>
                           <p className="text-xs text-slate-500">
                             {item.productType.charAt(0).toUpperCase() + item.productType.slice(1)} -- {item.keyword}
                           </p>

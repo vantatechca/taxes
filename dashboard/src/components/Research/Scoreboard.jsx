@@ -59,8 +59,8 @@ function ScoreTooltip({ breakdown }) {
   if (items.length === 0) return null;
 
   return (
-    <div className="absolute z-10 bottom-full left-0 mb-2 bg-slate-800/80 border border-slate-600/50 rounded-lg p-3 shadow-xl min-w-48 pointer-events-none">
-      <p className="text-xs font-semibold text-gray-300 mb-2">Score Breakdown</p>
+    <div className="absolute z-10 bottom-full left-0 mb-2 bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg p-3 shadow-xl min-w-48 pointer-events-none">
+      <p className="text-xs font-semibold text-gray-600 dark:text-gray-300 mb-2">Score Breakdown</p>
       {items.map((item) => (
         <div key={item.label} className="flex items-center justify-between py-0.5">
           <span className="text-xs text-slate-400">{item.label}</span>
@@ -177,18 +177,18 @@ export default function Scoreboard() {
       <ErrorMsg message={error} onDismiss={clearError} />
 
       {/* Header with rescore */}
-      <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-white">{"🏆"} Product Leaderboard</h2>
-            <p className="text-sm text-slate-500 mt-1">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{"🏆"} Product Leaderboard</h2>
+            <p className="text-sm text-gray-400 dark:text-slate-500 mt-1">
               Top products ranked by composite score
             </p>
           </div>
           <button
             onClick={handleRescore}
             disabled={rescoring}
-            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-5 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors"
+            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 dark:text-white px-5 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors"
           >
             {rescoring ? (
               <>
@@ -205,7 +205,7 @@ export default function Scoreboard() {
         <div className="flex flex-wrap items-center gap-4 mt-4 pt-4 border-t border-slate-700/40">
           {/* Min score slider */}
           <div className="flex items-center gap-2">
-            <label className="text-xs text-slate-400 whitespace-nowrap">Min Score:</label>
+            <label className="text-xs text-gray-500 dark:text-slate-400 whitespace-nowrap">Min Score:</label>
             <input
               type="range"
               min={0}
@@ -214,14 +214,14 @@ export default function Scoreboard() {
               onChange={(e) => setMinScore(parseInt(e.target.value))}
               className="w-24 accent-indigo-500"
             />
-            <span className="text-xs text-gray-300 w-6">{minScore}</span>
+            <span className="text-xs text-gray-600 dark:text-gray-300 w-6">{minScore}</span>
           </div>
 
           {/* Category filter */}
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-1.5 text-xs text-gray-300 focus:outline-none focus:border-indigo-500"
+            className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-1.5 text-xs text-gray-600 dark:text-gray-300 focus:outline-none focus:border-indigo-500"
           >
             <option value="all">All Categories</option>
             {categories.map((cat) => (
@@ -233,7 +233,7 @@ export default function Scoreboard() {
           <select
             value={sourceFilter}
             onChange={(e) => setSourceFilter(e.target.value)}
-            className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-1.5 text-xs text-gray-300 focus:outline-none focus:border-indigo-500"
+            className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-1.5 text-xs text-gray-600 dark:text-gray-300 focus:outline-none focus:border-indigo-500"
           >
             <option value="all">All Sources</option>
             <option value="Etsy">Etsy</option>
@@ -245,7 +245,7 @@ export default function Scoreboard() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-1.5 text-xs text-gray-300 focus:outline-none focus:border-indigo-500"
+            className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-1.5 text-xs text-gray-600 dark:text-gray-300 focus:outline-none focus:border-indigo-500"
           >
             <option value="score">Score</option>
             <option value="price">Price</option>
@@ -256,9 +256,9 @@ export default function Scoreboard() {
       </div>
 
       {/* Leaderboard */}
-      <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
         {displayItems.length === 0 ? (
-          <p className="text-sm text-slate-500 py-4 text-center">
+          <p className="text-sm text-gray-400 dark:text-slate-500 py-4 text-center">
             No products match your filters. Try lowering the minimum score.
           </p>
         ) : (
@@ -277,7 +277,7 @@ export default function Scoreboard() {
               return (
                 <div
                   key={item.id || item._id || idx}
-                  className="relative flex items-center gap-4 bg-slate-800/80 border border-slate-600/50 rounded-xl px-4 py-3 hover:border-slate-600 transition-colors"
+                  className="relative flex items-center gap-4 bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl px-4 py-3 hover:border-slate-600 transition-colors"
                   onMouseEnter={() => setHoveredRow(idx)}
                   onMouseLeave={() => setHoveredRow(null)}
                 >
@@ -292,12 +292,12 @@ export default function Scoreboard() {
 
                   {/* Product info */}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white truncate">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                       {item.name || item.title || "Untitled"}
                     </p>
                     <div className="flex items-center gap-2 mt-1">
                       {category && (
-                        <span className="text-xs bg-slate-700 text-gray-300 px-2 py-0.5 rounded">
+                        <span className="text-xs bg-slate-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded">
                           {category}
                         </span>
                       )}

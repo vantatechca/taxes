@@ -12,6 +12,7 @@
     "start": "node server/index.js"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.90.0",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "axios": "^1.15.0",
@@ -32,6 +33,5 @@
     "socks-proxy-agent": "^10.0.0",
     "tailwindcss": "^3.4.17",
     "vite": "^6.0.0"
-  },
-  "devDependencies": {}
+  }
 }

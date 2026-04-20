@@ -117,7 +117,7 @@ export default function Overview({ filters, onNavigate }) {
               </defs>
               <XAxis dataKey="date" tick={{ fill: "#6b7280", fontSize: 10 }} tickLine={false} interval={Math.max(1, Math.floor(trendDays / 8))} />
               <YAxis tick={{ fill: "#6b7280", fontSize: 10 }} tickLine={false} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} formatter={(val) => [`$${val.toLocaleString()}`, ""]} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} formatter={(val) => [`$${val.toLocaleString()}`, ""]} />
               <Area type="monotone" dataKey="total" stroke="#6366f1" strokeWidth={2} fill="url(#revAreaGrad)" />
             </AreaChart>
           </ResponsiveContainer>
@@ -130,7 +130,7 @@ export default function Overview({ filters, onNavigate }) {
               <Pie data={healthData} cx="50%" cy="50%" innerRadius={40} outerRadius={65} paddingAngle={2} dataKey="value">
                 {healthData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
               </Pie>
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} />
             </PieChart>
           </ResponsiveContainer>
           <div className="space-y-1 mt-2">

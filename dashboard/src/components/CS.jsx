@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { useData } from "../context/DataContext.jsx";
+import { useNotifications } from "../context/NotificationContext.jsx";
 import { getCSMetrics } from "../data/seedData.js";
 import { fmt } from "../utils/formatters.js";
 
@@ -22,7 +23,7 @@ function NewTicketForm({ stores, onSubmit, onCancel }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const store = stores.find((s) => s.store_id === parseInt(form.store_id));
+    const store = stores.find((s) => s.store_id === form.store_id);
     if (!store) return;
     onSubmit({
       store_id: store.store_id,
@@ -118,6 +119,7 @@ function TicketRow({ ticket, onResolve, isUserTicket }) {
 
 export default function CS() {
   const { stores, csTickets, addTicket, resolveTicket } = useData();
+  const { notify } = useNotifications();
   const seedMetrics = useMemo(() => getCSMetrics(), []);
   const [showForm, setShowForm] = useState(false);
   const [ticketFilter, setTicketFilter] = useState("all"); // all, open, resolved
@@ -171,6 +173,12 @@ export default function CS() {
   function handleCreateTicket(ticket) {
     addTicket(ticket);
     setShowForm(false);
+    notify(`Ticket created for ${ticket.store_name}`, "success");
+  }
+
+  function handleResolveTicket(ticketId) {
+    resolveTicket(ticketId);
+    notify("Ticket resolved!", "success");
   }
 
   return (
@@ -219,7 +227,7 @@ export default function CS() {
               <Pie data={typeData} cx="50%" cy="50%" innerRadius={40} outerRadius={65} paddingAngle={2} dataKey="value">
                 {typeData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
               </Pie>
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} />
             </PieChart>
           </ResponsiveContainer>
           <div className="space-y-1">
@@ -241,10 +249,10 @@ export default function CS() {
             <BarChart data={priorityData}>
               <XAxis dataKey="name" tick={{ fill: "#6b7280", fontSize: 11 }} tickLine={false} />
               <YAxis tick={{ fill: "#6b7280", fontSize: 10 }} tickLine={false} />
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} />
               <Bar dataKey="count" radius={[4, 4, 0, 0]}>
                 {priorityData.map((entry, i) => (
-                  <rect key={i} fill={entry.color} />
+                  <Cell key={i} fill={entry.color} />
                 ))}
               </Bar>
             </BarChart>
@@ -376,7 +384,7 @@ export default function CS() {
                   key={t.id || i}
                   ticket={t}
                   isUserTicket={t.source === "user"}
-                  onResolve={t.source === "user" && t.status !== "resolved" ? resolveTicket : null}
+                  onResolve={t.source === "user" && t.status !== "resolved" ? handleResolveTicket : null}
                 />
               ))}
               {filteredTickets.length === 0 && (

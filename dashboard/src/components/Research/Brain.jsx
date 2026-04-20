@@ -126,6 +126,11 @@ export default function Brain() {
   const [error, setError] = useState("");
   const clearError = useCallback(() => setError(""), []);
 
+  // Chat
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatInput, setChatInput] = useState("");
+  const [chatLoading, setChatLoading] = useState(false);
+
   // Preferences
   const [preferences, setPreferences] = useState(loadPrefs);
 
@@ -463,9 +468,41 @@ export default function Brain() {
     return "Other";
   }
 
+  /* ──── Chat ──── */
+
+  async function sendChat() {
+    const text = chatInput.trim();
+    if (!text || chatLoading) return;
+
+    const userMsg = { role: "user", content: text };
+    const updated = [...chatMessages, userMsg];
+    setChatMessages(updated);
+    setChatInput("");
+    setChatLoading(true);
+
+    try {
+      const res = await fetch(`${API}/api/assistant/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: updated, rules }),
+      });
+      const data = await res.json();
+      if (data.reply) {
+        setChatMessages([...updated, { role: "assistant", content: data.reply }]);
+      } else {
+        setError(data.error || "No response from assistant");
+      }
+    } catch (err) {
+      setError("Failed to reach assistant");
+    } finally {
+      setChatLoading(false);
+    }
+  }
+
   /* ──── Render ──── */
 
   const SECTIONS = [
+    { id: "chat", label: "Chat", icon: "🤖" },
     { id: "dna", label: "Product DNA", icon: "🧬" },
     { id: "rules", label: "Golden Rules", icon: "📜" },
     { id: "journal", label: "Research Journal", icon: "📓" },
@@ -485,8 +522,8 @@ export default function Brain() {
             onClick={() => setActiveSection(s.id)}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
               activeSection === s.id
-                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
-                : "bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700/70"
+                ? "bg-indigo-600 text-gray-900 dark:text-white shadow-lg shadow-indigo-600/20"
+                : "bg-slate-800 text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:bg-slate-700/70"
             }`}
           >
             <span>{s.icon}</span>
@@ -495,23 +532,88 @@ export default function Brain() {
         ))}
       </div>
 
+      {/* ════════════════ Section: Chat ════════════════ */}
+      {activeSection === "chat" && (
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/40 rounded-2xl p-6 flex flex-col h-[600px]">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">🤖 Research Assistant</h2>
+            {chatMessages.length > 0 && (
+              <button onClick={() => setChatMessages([])} className="text-xs text-gray-400 dark:text-slate-500 hover:text-red-400 transition-colors">Clear chat</button>
+            )}
+          </div>
+
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-1">
+            {chatMessages.length === 0 && (
+              <div className="flex flex-col items-center justify-center h-full text-center gap-3">
+                <span className="text-5xl">🤖</span>
+                <p className="text-gray-500 dark:text-slate-400 text-sm">Ask me anything about digital products, niches, trends, or market research.</p>
+                <p className="text-xs text-gray-400 dark:text-slate-500">Golden Rules are automatically applied to every response.</p>
+              </div>
+            )}
+            {chatMessages.map((msg, i) => (
+              <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm ${
+                  msg.role === "user"
+                    ? "bg-indigo-600 text-white rounded-br-sm"
+                    : "bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200 rounded-bl-sm"
+                }`}>
+                  <p className="whitespace-pre-wrap">{msg.content}</p>
+                </div>
+              </div>
+            ))}
+            {chatLoading && (
+              <div className="flex justify-start">
+                <div className="bg-gray-100 dark:bg-slate-800 rounded-2xl rounded-bl-sm px-4 py-3">
+                  <div className="flex gap-1 items-center">
+                    <span className="w-2 h-2 bg-gray-400 dark:bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                    <span className="w-2 h-2 bg-gray-400 dark:bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                    <span className="w-2 h-2 bg-gray-400 dark:bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Input */}
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendChat()}
+              placeholder="Ask about niches, products, trends..."
+              className="flex-1 bg-gray-50 dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+              disabled={chatLoading}
+            />
+            <button
+              onClick={sendChat}
+              disabled={chatLoading || !chatInput.trim()}
+              className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-colors"
+            >
+              {chatLoading ? <Spinner /> : "Send"}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* ════════════════ Section 1: Product DNA ════════════════ */}
       {activeSection === "dna" && (
         <div className="space-y-6">
-          <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                   <span>🧬</span> Product DNA
                 </h2>
-                <p className="text-xs text-slate-500 mt-1">Your preference profile built from {dna.liked} likes and {dna.passed} passes</p>
+                <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">Your preference profile built from {dna.liked} likes and {dna.passed} passes</p>
               </div>
               <button
                 onClick={() => {
                   savePrefs({ liked: [], passed: [], searchHistory: preferences.searchHistory || [] });
                   setPreferences(loadPrefs());
                 }}
-                className="text-xs text-slate-600 hover:text-red-400 transition-colors px-3 py-1.5 rounded-lg hover:bg-slate-800"
+                className="text-xs text-gray-500 dark:text-slate-600 hover:text-red-400 transition-colors px-3 py-1.5 rounded-lg hover:bg-slate-800"
               >
                 Reset Profile
               </button>
@@ -526,18 +628,18 @@ export default function Brain() {
               <>
                 {/* Summary cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                  <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4">
-                    <p className="text-xs text-slate-500 mb-2">You tend to like</p>
+                  <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4">
+                    <p className="text-xs text-gray-400 dark:text-slate-500 mb-2">You tend to like</p>
                     <p className="text-sm text-white">
                       <span className="text-indigo-400 font-semibold">{dna.topType}</span> products in{" "}
                       <span className="text-indigo-400 font-semibold">{dna.topNiche}</span>
                     </p>
-                    <p className="text-xs text-slate-500 mt-1">
+                    <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
                       priced ${dna.minPrice.toFixed(0)} - ${dna.maxPrice.toFixed(0)} (avg ${dna.avgPrice.toFixed(2)})
                     </p>
                   </div>
-                  <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4">
-                    <p className="text-xs text-slate-500 mb-2">You tend to avoid</p>
+                  <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4">
+                    <p className="text-xs text-gray-400 dark:text-slate-500 mb-2">You tend to avoid</p>
                     {dna.avoidedTypes.length > 0 ? (
                       <div className="space-y-1">
                         {dna.avoidedTypes.map((t) => (
@@ -550,12 +652,12 @@ export default function Brain() {
                       <p className="text-sm text-slate-500">No clear avoidance patterns</p>
                     )}
                   </div>
-                  <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4">
-                    <p className="text-xs text-slate-500 mb-2">Preferred Price Range</p>
-                    <p className="text-2xl font-bold text-white">
+                  <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4">
+                    <p className="text-xs text-gray-400 dark:text-slate-500 mb-2">Preferred Price Range</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
                       ${dna.minPrice.toFixed(0)} - ${dna.maxPrice.toFixed(0)}
                     </p>
-                    <p className="text-xs text-slate-500 mt-1">Average: ${dna.avgPrice.toFixed(2)}</p>
+                    <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">Average: ${dna.avgPrice.toFixed(2)}</p>
                   </div>
                 </div>
 
@@ -563,8 +665,8 @@ export default function Brain() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Type distribution donut */}
                   {dna.typeData.length > 0 && (
-                    <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4">
-                      <h3 className="text-sm font-semibold text-gray-300 mb-3">Type Distribution (Liked)</h3>
+                    <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4">
+                      <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">Type Distribution (Liked)</h3>
                       <div className="h-52">
                         <ResponsiveContainer width="100%" height="100%">
                           <PieChart>
@@ -593,8 +695,8 @@ export default function Brain() {
 
                   {/* Niche distribution donut */}
                   {dna.nicheData.length > 0 && (
-                    <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4">
-                      <h3 className="text-sm font-semibold text-gray-300 mb-3">Niche Distribution (Liked)</h3>
+                    <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4">
+                      <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">Niche Distribution (Liked)</h3>
                       <div className="h-52">
                         <ResponsiveContainer width="100%" height="100%">
                           <PieChart>
@@ -629,18 +731,18 @@ export default function Brain() {
 
       {/* ════════════════ Section 2: Golden Rules ════════════════ */}
       {activeSection === "rules" && (
-        <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <span>📜</span> Golden Rules
               </h2>
-              <p className="text-xs text-slate-500 mt-1">Rules that guide your research decisions</p>
+              <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">Rules that guide your research decisions</p>
             </div>
             <button
               onClick={() => handleSaveRules()}
               disabled={rulesSaving}
-              className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+              className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
             >
               {rulesSaving && <Spinner />}
               Save Rules
@@ -657,11 +759,11 @@ export default function Brain() {
               {/* Current rules */}
               <div className="space-y-2 mb-6">
                 {rules.length === 0 ? (
-                  <p className="text-sm text-slate-500 py-4">No rules set. Add your first research rule below.</p>
+                  <p className="text-sm text-gray-400 dark:text-slate-500 py-4">No rules set. Add your first research rule below.</p>
                 ) : (
                   rules.map((rule, idx) => (
-                    <div key={idx} className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-3 flex items-center gap-3 group">
-                      <span className="text-xs text-slate-600 font-mono w-6 shrink-0 text-center">{idx + 1}</span>
+                    <div key={idx} className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-3 flex items-center gap-3 group">
+                      <span className="text-xs text-gray-500 dark:text-slate-600 font-mono w-6 shrink-0 text-center">{idx + 1}</span>
                       {editingRuleIdx === idx ? (
                         <input
                           type="text"
@@ -676,12 +778,12 @@ export default function Brain() {
                             }
                             if (e.key === "Escape") setEditingRuleIdx(null);
                           }}
-                          className="flex-1 bg-gray-900 border border-indigo-500 rounded px-3 py-1 text-sm text-gray-100 focus:outline-none"
+                          className="flex-1 bg-white dark:bg-gray-900 border border-indigo-500 rounded px-3 py-1 text-sm text-gray-900 dark:text-gray-100 focus:outline-none"
                           autoFocus
                         />
                       ) : (
                         <p
-                          className="flex-1 text-sm text-gray-300 cursor-pointer hover:text-white transition-colors"
+                          className="flex-1 text-sm text-gray-600 dark:text-gray-300 cursor-pointer hover:text-gray-900 dark:hover:text-white transition-colors"
                           onClick={() => {
                             setEditingRuleIdx(idx);
                             setEditingRuleText(typeof rule === "string" ? rule : rule.text || rule.rule || "");
@@ -717,7 +819,7 @@ export default function Brain() {
                     }
                   }}
                   placeholder="Add a new research rule..."
-                  className="flex-1 bg-slate-800/80 border border-slate-600/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                  className="flex-1 bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
                 />
                 <button
                   onClick={() => {
@@ -726,7 +828,7 @@ export default function Brain() {
                       setNewRule("");
                     }
                   }}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  className="bg-indigo-600 hover:bg-indigo-500 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   Add
                 </button>
@@ -734,13 +836,13 @@ export default function Brain() {
 
               {/* Preset suggestions */}
               <div>
-                <h3 className="text-xs text-slate-500 uppercase tracking-wide mb-3">Suggested Rules</h3>
+                <h3 className="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wide mb-3">Suggested Rules</h3>
                 <div className="flex flex-wrap gap-2">
                   {PRESET_RULES.filter((pr) => !rules.some((r) => (typeof r === "string" ? r : r.text || "") === pr)).map((preset, i) => (
                     <button
                       key={i}
                       onClick={() => setRules([...rules, preset])}
-                      className="bg-slate-800 hover:bg-slate-700/70 border border-slate-700/50 hover:border-indigo-500 text-slate-400 hover:text-white px-3 py-1.5 rounded-lg text-xs transition-all"
+                      className="bg-slate-800 hover:bg-gray-100 dark:hover:bg-gray-200 dark:hover:bg-slate-700/70 border border-gray-200 dark:border-slate-700/50 hover:border-indigo-500 text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white px-3 py-1.5 rounded-lg text-xs transition-all"
                     >
                       + {preset}
                     </button>
@@ -754,17 +856,17 @@ export default function Brain() {
 
       {/* ════════════════ Section 3: Research Journal ════════════════ */}
       {activeSection === "journal" && (
-        <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <span>📓</span> Research Journal
               </h2>
-              <p className="text-xs text-slate-500 mt-1">{journal.length} entr{journal.length === 1 ? "y" : "ies"}</p>
+              <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">{journal.length} entr{journal.length === 1 ? "y" : "ies"}</p>
             </div>
             <button
               onClick={() => setShowJournalForm(true)}
-              className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              className="bg-indigo-600 hover:bg-indigo-500 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
             >
               + Add Entry
             </button>
@@ -772,29 +874,29 @@ export default function Brain() {
 
           {/* Add Entry Form */}
           {showJournalForm && (
-            <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-5 mb-5 space-y-4">
+            <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-5 mb-5 space-y-4">
               <div>
-                <label className="block text-xs text-slate-500 mb-1">Title (optional)</label>
+                <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Title (optional)</label>
                 <input
                   type="text"
                   value={journalForm.title}
                   onChange={(e) => setJournalForm((p) => ({ ...p, title: e.target.value }))}
                   placeholder="e.g. Found a great PLR source for finance..."
-                  className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                  className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-xs text-slate-500 mb-1">Body *</label>
+                <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Body *</label>
                 <textarea
                   value={journalForm.body}
                   onChange={(e) => setJournalForm((p) => ({ ...p, body: e.target.value }))}
                   placeholder="Write your research notes here..."
                   rows={5}
-                  className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none resize-none"
+                  className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none resize-none"
                 />
               </div>
               <div>
-                <label className="block text-xs text-slate-500 mb-1">Tags</label>
+                <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Tags</label>
                 <div className="flex flex-wrap gap-2 mb-2">
                   {journalForm.tags.map((tag, i) => (
                     <span key={i} className="bg-indigo-900/50 text-indigo-400 px-2 py-0.5 rounded text-xs flex items-center gap-1">
@@ -813,7 +915,7 @@ export default function Brain() {
                     <button
                       key={tag}
                       onClick={() => setJournalForm((p) => ({ ...p, tags: [...p.tags, tag] }))}
-                      className="bg-slate-700 hover:bg-slate-600 text-slate-400 hover:text-white px-2 py-0.5 rounded text-[10px] transition-colors"
+                      className="bg-slate-700 hover:bg-slate-600 text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white px-2 py-0.5 rounded text-[10px] transition-colors"
                     >
                       {tag}
                     </button>
@@ -821,25 +923,25 @@ export default function Brain() {
                 </div>
               </div>
               <div>
-                <label className="block text-xs text-slate-500 mb-1">Linked Product (optional)</label>
+                <label className="block text-xs text-gray-400 dark:text-slate-500 mb-1">Linked Product (optional)</label>
                 <input
                   type="text"
                   value={journalForm.linkedProduct}
                   onChange={(e) => setJournalForm((p) => ({ ...p, linkedProduct: e.target.value }))}
                   placeholder="Product name to reference..."
-                  className="w-full bg-gray-900 border border-slate-700/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                  className="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
                 />
               </div>
               <div className="flex items-center gap-2">
                 <button
                   onClick={addJournalEntry}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  className="bg-indigo-600 hover:bg-indigo-500 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   Save Entry
                 </button>
                 <button
                   onClick={() => setShowJournalForm(false)}
-                  className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  className="bg-slate-700 hover:bg-slate-600 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   Cancel
                 </button>
@@ -854,12 +956,12 @@ export default function Brain() {
               value={journalSearch}
               onChange={(e) => setJournalSearch(e.target.value)}
               placeholder="Search entries..."
-              className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-1.5 text-sm text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none w-64"
+              className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-1.5 text-sm text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none w-64"
             />
             <select
               value={journalFilter}
               onChange={(e) => setJournalFilter(e.target.value)}
-              className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-indigo-500"
+              className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-indigo-500"
             >
               <option value="">All tags</option>
               {allJournalTags.map((tag) => (
@@ -869,7 +971,7 @@ export default function Brain() {
             {(journalFilter || journalSearch) && (
               <button
                 onClick={() => { setJournalFilter(""); setJournalSearch(""); }}
-                className="text-xs text-slate-500 hover:text-gray-300 transition-colors"
+                className="text-xs text-gray-400 dark:text-slate-500 hover:text-gray-300 transition-colors"
               >
                 Clear filters
               </button>
@@ -878,17 +980,17 @@ export default function Brain() {
 
           {/* Journal entries */}
           {filteredJournal.length === 0 ? (
-            <p className="text-sm text-slate-500 py-4">
+            <p className="text-sm text-gray-400 dark:text-slate-500 py-4">
               {journal.length === 0 ? "No journal entries yet. Start documenting your research!" : "No entries match your filters."}
             </p>
           ) : (
             <div className="space-y-3">
               {filteredJournal.map((entry) => (
-                <div key={entry.id} className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-4 space-y-2 group">
+                <div key={entry.id} className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-4 space-y-2 group">
                   <div className="flex items-start justify-between">
                     <div>
                       {entry.title && (
-                        <h3 className="text-sm font-semibold text-white">{entry.title}</h3>
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{entry.title}</h3>
                       )}
                       <p className="text-xs text-slate-500">
                         {new Date(entry.timestamp).toLocaleDateString()} at {new Date(entry.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
@@ -901,11 +1003,11 @@ export default function Brain() {
                       Delete
                     </button>
                   </div>
-                  <p className="text-sm text-gray-300 whitespace-pre-wrap">{entry.body}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 whitespace-pre-wrap">{entry.body}</p>
                   {entry.tags && entry.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1">
                       {entry.tags.map((tag, i) => (
-                        <span key={i} className="bg-slate-700 text-slate-400 px-2 py-0.5 rounded text-[10px]">{tag}</span>
+                        <span key={i} className="bg-slate-700 text-gray-500 dark:text-slate-400 px-2 py-0.5 rounded text-[10px]">{tag}</span>
                       ))}
                     </div>
                   )}
@@ -922,8 +1024,8 @@ export default function Brain() {
       {/* ════════════════ Section 4: Insights Dashboard ════════════════ */}
       {activeSection === "insights" && (
         <div className="space-y-6">
-          <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-            <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
               <span>💡</span> Insights Dashboard
             </h2>
 
@@ -935,7 +1037,7 @@ export default function Brain() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Products You'd Probably Like */}
-                <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-5">
+                <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-5">
                   <h3 className="text-sm font-semibold text-green-400 mb-3 flex items-center gap-2">
                     <span>&#10024;</span> Products You&apos;d Probably Like
                   </h3>
@@ -953,7 +1055,7 @@ export default function Brain() {
                 </div>
 
                 {/* Untapped Niches */}
-                <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-5">
+                <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-5">
                   <h3 className="text-sm font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                     <span>&#128269;</span> Untapped Niches
                   </h3>
@@ -971,7 +1073,7 @@ export default function Brain() {
                 </div>
 
                 {/* Price Sweet Spot */}
-                <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-5">
+                <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-5">
                   <h3 className="text-sm font-semibold text-blue-400 mb-3 flex items-center gap-2">
                     <span>&#128176;</span> Price Sweet Spot
                   </h3>
@@ -979,13 +1081,13 @@ export default function Brain() {
                 </div>
 
                 {/* Trend Alignment */}
-                <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-5">
+                <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-5">
                   <h3 className="text-sm font-semibold text-purple-400 mb-3 flex items-center gap-2">
                     <span>&#128200;</span> Trend Alignment
                   </h3>
                   {insights.alignedNiches.length > 0 ? (
                     <div>
-                      <p className="text-sm text-gray-300 mb-2">Your liked products align with these trending niches:</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">Your liked products align with these trending niches:</p>
                       <div className="flex flex-wrap gap-2">
                         {insights.alignedNiches.map((n) => (
                           <span key={n} className="bg-purple-900/20 border border-purple-800/30 text-purple-400 px-3 py-1.5 rounded-lg text-xs">
@@ -1012,8 +1114,8 @@ export default function Brain() {
       {activeSection === "teach" && (
         <div className="space-y-6">
           {/* Swipe Interface */}
-          <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-            <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
               <span>🎓</span> Teach Me Your Preferences
             </h2>
 
@@ -1027,7 +1129,7 @@ export default function Brain() {
                 <p className="text-green-400 text-sm mb-2">All done! You&apos;ve reviewed all available products.</p>
                 <button
                   onClick={() => setTeachIdx(0)}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium mt-2 transition-colors"
+                  className="bg-indigo-600 hover:bg-indigo-500 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium mt-2 transition-colors"
                 >
                   Start Over
                 </button>
@@ -1051,8 +1153,8 @@ export default function Brain() {
                   const type = classifyProduct(product.title);
 
                   return (
-                    <div className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-6 max-w-lg mx-auto">
-                      <h3 className="text-base font-semibold text-white mb-3 leading-snug">{product.title || "Untitled Product"}</h3>
+                    <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-6 max-w-lg mx-auto">
+                      <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3 leading-snug">{product.title || "Untitled Product"}</h3>
                       <div className="grid grid-cols-2 gap-3 mb-5">
                         <div className="bg-gray-900 rounded-lg p-3 text-center">
                           <p className="text-xs text-slate-500">Price</p>
@@ -1060,7 +1162,7 @@ export default function Brain() {
                         </div>
                         <div className="bg-gray-900 rounded-lg p-3 text-center">
                           <p className="text-xs text-slate-500">Reviews</p>
-                          <p className="text-lg font-bold text-white">{reviews}</p>
+                          <p className="text-lg font-bold text-gray-900 dark:text-white">{reviews}</p>
                         </div>
                         <div className="bg-gray-900 rounded-lg p-3 text-center">
                           <p className="text-xs text-slate-500">Type</p>
@@ -1074,13 +1176,13 @@ export default function Brain() {
                       <div className="flex items-center gap-4 justify-center">
                         <button
                           onClick={() => handleTeachPass(product)}
-                          className="bg-red-900/30 hover:bg-red-600 text-red-400 hover:text-white px-8 py-3 rounded-xl text-sm font-semibold transition-all flex items-center gap-2"
+                          className="bg-red-900/30 hover:bg-red-600 text-red-400 hover:text-gray-900 dark:hover:text-white px-8 py-3 rounded-xl text-sm font-semibold transition-all flex items-center gap-2"
                         >
                           <span className="text-lg">👎</span> Pass
                         </button>
                         <button
                           onClick={() => handleTeachLike(product)}
-                          className="bg-green-900/30 hover:bg-green-600 text-green-400 hover:text-white px-8 py-3 rounded-xl text-sm font-semibold transition-all flex items-center gap-2"
+                          className="bg-green-900/30 hover:bg-green-600 text-green-400 hover:text-gray-900 dark:hover:text-white px-8 py-3 rounded-xl text-sm font-semibold transition-all flex items-center gap-2"
                         >
                           <span className="text-lg">👍</span> Like
                         </button>
@@ -1091,15 +1193,15 @@ export default function Brain() {
 
                 {/* Live DNA stats */}
                 <div className="grid grid-cols-3 gap-3 mt-6 max-w-lg mx-auto">
-                  <div className="bg-slate-800/80 border border-slate-600/50 rounded-lg p-2 text-center">
+                  <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg p-2 text-center">
                     <p className="text-xs text-slate-500">Liked</p>
                     <p className="text-sm font-bold text-green-400">{dna.liked}</p>
                   </div>
-                  <div className="bg-slate-800/80 border border-slate-600/50 rounded-lg p-2 text-center">
+                  <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg p-2 text-center">
                     <p className="text-xs text-slate-500">Passed</p>
                     <p className="text-sm font-bold text-red-400">{dna.passed}</p>
                   </div>
-                  <div className="bg-slate-800/80 border border-slate-600/50 rounded-lg p-2 text-center">
+                  <div className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg p-2 text-center">
                     <p className="text-xs text-slate-500">Top Type</p>
                     <p className="text-sm font-bold text-indigo-400">{dna.topType}</p>
                   </div>
@@ -1109,11 +1211,11 @@ export default function Brain() {
           </div>
 
           {/* "I'm looking for..." */}
-          <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
-            <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <span>&#128172;</span> I&apos;m looking for...
             </h3>
-            <p className="text-xs text-slate-500 mb-3">Describe what products you want to find. These become structured criteria for your research.</p>
+            <p className="text-xs text-gray-400 dark:text-slate-500 mb-3">Describe what products you want to find. These become structured criteria for your research.</p>
 
             <div className="flex gap-2 mb-4">
               <input
@@ -1124,11 +1226,11 @@ export default function Brain() {
                   if (e.key === "Enter") handleAddCriteria();
                 }}
                 placeholder='e.g. "High-margin spreadsheets in the finance niche under $30"'
-                className="flex-1 bg-slate-800/80 border border-slate-600/50 rounded-lg px-4 py-2 text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                className="flex-1 bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-4 py-2 text-gray-900 dark:text-gray-100 placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
               />
               <button
                 onClick={handleAddCriteria}
-                className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                className="bg-indigo-600 hover:bg-indigo-500 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
               >
                 Add
               </button>
@@ -1137,10 +1239,10 @@ export default function Brain() {
             {brainNotes.length > 0 && (
               <div className="space-y-2">
                 {brainNotes.map((note) => (
-                  <div key={note.id} className="bg-slate-800/80 border border-slate-600/50 rounded-xl p-3 flex items-center justify-between group">
+                  <div key={note.id} className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-xl p-3 flex items-center justify-between group">
                     <div className="min-w-0 flex-1">
                       <p className="text-sm text-gray-300">{note.text}</p>
-                      <p className="text-[10px] text-slate-600 mt-0.5">
+                      <p className="text-[10px] text-gray-500 dark:text-slate-600 mt-0.5">
                         {new Date(note.timestamp).toLocaleDateString()}
                       </p>
                     </div>

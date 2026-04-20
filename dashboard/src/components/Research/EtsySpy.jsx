@@ -257,7 +257,7 @@ function ErrorMsg({ message, onDismiss }) {
 function SectionHeader({ children, count, extra }) {
   return (
     <div className="flex items-center justify-between mb-4">
-      <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
         {children}
         {count != null && (
           <span className="text-xs font-normal bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">
@@ -665,7 +665,7 @@ export default function EtsySpy() {
       <ErrorMsg message={error} onDismiss={clearError} />
 
       {/* ════════════ SECTION 1: Niche Quick Research ════════════ */}
-      <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
         <div className="flex items-center justify-between mb-4">
           <SectionHeader>
             <span className="text-xl">🔍</span> Niche Quick Research
@@ -689,7 +689,7 @@ export default function EtsySpy() {
               return (
                 <div
                   key={niche.name}
-                  className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 hover:border-slate-600/50 transition-all"
+                  className="bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-600/60 rounded-xl p-4 hover:border-gray-300 dark:hover:border-slate-500 transition-all"
                 >
                   {/* Niche header */}
                   <div className="flex items-center justify-between mb-3">
@@ -704,9 +704,9 @@ export default function EtsySpy() {
                         }`}
                       />
                       <span className="text-base">{niche.emoji}</span>
-                      <span className="text-sm font-semibold text-gray-200">{niche.name}</span>
+                      <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">{niche.name}</span>
                     </div>
-                    <span className="text-[10px] text-slate-500">
+                    <span className="text-[10px] text-gray-400 dark:text-slate-500">
                       {researched}/{total}
                     </span>
                   </div>
@@ -723,7 +723,7 @@ export default function EtsySpy() {
                           className={`px-3 py-1 rounded-full text-xs cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
                             isResearched
                               ? "bg-green-900/40 text-green-300 border border-green-700/50 hover:bg-green-800/60"
-                              : "bg-slate-700/60 hover:bg-indigo-600 text-gray-300 hover:text-white"
+                              : "bg-gray-200 dark:bg-slate-600 hover:bg-indigo-600 text-gray-700 dark:text-slate-100 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-slate-500/50"
                           }`}
                           title={q}
                         >
@@ -737,7 +737,7 @@ export default function EtsySpy() {
                   <button
                     onClick={() => handleResearchAll(niche)}
                     disabled={searching || isBulkRunning}
-                    className="w-full text-center bg-slate-700/50 hover:bg-indigo-600/60 disabled:opacity-40 disabled:cursor-not-allowed text-gray-300 hover:text-white text-xs py-1.5 rounded-lg transition-all flex items-center justify-center gap-1.5"
+                    className="w-full text-center bg-gray-200 dark:bg-slate-700 hover:bg-indigo-600 disabled:opacity-40 disabled:cursor-not-allowed text-gray-700 dark:text-slate-200 hover:text-gray-900 dark:hover:text-white text-xs py-1.5 rounded-lg transition-all flex items-center justify-center gap-1.5 border border-gray-300 dark:border-slate-600"
                   >
                     {isBulkRunning ? (
                       <>
@@ -757,7 +757,7 @@ export default function EtsySpy() {
       </div>
 
       {/* ════════════ SECTION 2: Search Etsy ════════════ */}
-      <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
         <SectionHeader>
           <span className="text-xl">🔎</span> Search Etsy
         </SectionHeader>
@@ -781,15 +781,15 @@ export default function EtsySpy() {
                   if (e.key === "Escape") setShowAutocomplete(false);
                 }}
                 placeholder="Search Etsy for digital products..."
-                className="w-full bg-slate-800/80 border border-slate-600/50 rounded-lg px-4 py-3 text-gray-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none text-base"
+                className="w-full bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-slate-500 focus:border-indigo-500 focus:outline-none text-base"
               />
 
               {/* Autocomplete dropdown */}
               {showAutocomplete && (autocompleteSuggestions.length > 0 || (!query.trim() && recentSearches.length > 0)) && (
-                <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-slate-800/80 border border-slate-600/50 rounded-xl shadow-2xl overflow-hidden max-h-72 overflow-y-auto">
+                <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800/80 border border-gray-200 dark:border-slate-600/50 rounded-xl shadow-2xl overflow-hidden max-h-72 overflow-y-auto">
                   {!query.trim() && recentSearches.length > 0 && (
                     <>
-                      <div className="px-4 py-2 text-[10px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-700/50">
+                      <div className="px-4 py-2 text-[10px] font-semibold text-gray-400 dark:text-slate-500 uppercase tracking-wider border-b border-gray-200 dark:border-slate-700/50">
                         Recent Searches
                       </div>
                       {recentSearches.map((s, i) => (
@@ -799,14 +799,14 @@ export default function EtsySpy() {
                             setShowAutocomplete(false);
                             handleSearch(s.query, s.niche);
                           }}
-                          className="w-full px-4 py-2.5 text-left text-sm text-gray-300 hover:bg-slate-700/70 hover:text-white flex items-center justify-between transition-colors"
+                          className="w-full px-4 py-2.5 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-100 dark:hover:bg-slate-700/70 hover:text-gray-900 dark:hover:text-gray-900 dark:hover:text-white flex items-center justify-between transition-colors"
                         >
                           <span className="flex items-center gap-2">
                             <span className="text-slate-600">🕒</span>
                             {s.query}
                           </span>
                           {s.niche && (
-                            <span className="text-[10px] text-slate-600">{s.niche}</span>
+                            <span className="text-[10px] text-gray-400 dark:text-slate-600">{s.niche}</span>
                           )}
                         </button>
                       ))}
@@ -814,7 +814,7 @@ export default function EtsySpy() {
                   )}
                   {query.trim() && autocompleteSuggestions.length > 0 && (
                     <>
-                      <div className="px-4 py-2 text-[10px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-700/50">
+                      <div className="px-4 py-2 text-[10px] font-semibold text-gray-400 dark:text-slate-500 uppercase tracking-wider border-b border-gray-200 dark:border-slate-700/50">
                         Suggestions
                       </div>
                       {autocompleteSuggestions.map((s, i) => (
@@ -824,10 +824,10 @@ export default function EtsySpy() {
                             setShowAutocomplete(false);
                             handleSearch(s.query, s.niche);
                           }}
-                          className="w-full px-4 py-2.5 text-left text-sm text-gray-300 hover:bg-slate-700/70 hover:text-white flex items-center justify-between transition-colors"
+                          className="w-full px-4 py-2.5 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-100 dark:hover:bg-slate-700/70 hover:text-gray-900 dark:hover:text-gray-900 dark:hover:text-white flex items-center justify-between transition-colors"
                         >
                           <span>{s.query}</span>
-                          <span className="text-[10px] text-slate-600">{s.niche}</span>
+                          <span className="text-[10px] text-gray-400 dark:text-slate-600">{s.niche}</span>
                         </button>
                       ))}
                     </>
@@ -837,11 +837,11 @@ export default function EtsySpy() {
             </div>
 
             <div className="flex items-center gap-2">
-              <label className="text-xs text-slate-400 whitespace-nowrap">Pages:</label>
+              <label className="text-xs text-gray-500 dark:text-slate-400 whitespace-nowrap">Pages:</label>
               <select
                 value={pages}
                 onChange={(e) => setPages(parseInt(e.target.value))}
-                className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-3 text-gray-100 focus:border-indigo-500 focus:outline-none"
+                className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-3 text-gray-900 dark:text-gray-100 focus:border-indigo-500 focus:outline-none"
               >
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
                   <option key={n} value={n}>
@@ -857,7 +857,7 @@ export default function EtsySpy() {
                 handleSearch();
               }}
               disabled={searching || !query.trim()}
-              className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-8 py-3 rounded-lg font-medium flex items-center gap-2 transition-colors whitespace-nowrap"
+              className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 dark:text-white px-8 py-3 rounded-lg font-medium flex items-center gap-2 transition-colors whitespace-nowrap"
             >
               {searching ? <Spinner /> : <span>🔍</span>}
               {searching ? "Searching..." : "Search Etsy"}
@@ -889,12 +889,12 @@ export default function EtsySpy() {
         {/* Recent searches chips */}
         {!searching && recentSearches.length > 0 && (
           <div className="mt-3 flex items-center gap-2 flex-wrap">
-            <span className="text-[10px] text-slate-600 uppercase tracking-wider">Recent:</span>
+            <span className="text-[10px] text-gray-500 dark:text-slate-600 uppercase tracking-wider">Recent:</span>
             {recentSearches.slice(0, 6).map((s, i) => (
               <button
                 key={i}
                 onClick={() => handleSearch(s.query, s.niche)}
-                className="bg-slate-800/50 hover:bg-slate-700/70 text-slate-400 hover:text-slate-200 px-2.5 py-1 rounded-full text-[11px] transition-colors"
+                className="bg-gray-100 dark:bg-slate-800/50 hover:bg-gray-200 dark:hover:bg-gray-100 dark:hover:bg-slate-700/70 text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 px-2.5 py-1 rounded-full text-[11px] transition-colors"
               >
                 {s.query}
               </button>
@@ -905,11 +905,11 @@ export default function EtsySpy() {
 
       {/* ════════════ SECTION 3: Results ════════════ */}
       {results.length > 0 && (
-        <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
           {/* Results header */}
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-5">
             <div>
-              <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                 <span>📦</span> Results
                 <span className="text-xs font-normal bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full">
                   {displayResults.length} of {results.length}
@@ -927,7 +927,7 @@ export default function EtsySpy() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-indigo-500"
+                className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-indigo-500"
               >
                 <option value="reviews">Best Sellers (Reviews)</option>
                 <option value="revenue">Highest Revenue</option>
@@ -945,13 +945,13 @@ export default function EtsySpy() {
                 value={filterText}
                 onChange={(e) => setFilterText(e.target.value)}
                 placeholder="Filter by title or shop..."
-                className="w-full bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                className="w-full bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
               />
             </div>
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-indigo-500"
+              className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-sm text-gray-600 dark:text-gray-300 focus:outline-none focus:border-indigo-500"
             >
               <option value="All">All Types</option>
               {PRODUCT_TYPES.map((pt) => (
@@ -968,7 +968,7 @@ export default function EtsySpy() {
                 min={0}
                 value={minReviews}
                 onChange={(e) => setMinReviews(Math.max(0, parseInt(e.target.value) || 0))}
-                className="w-20 bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-sm text-gray-100 text-center focus:border-indigo-500 focus:outline-none"
+                className="w-20 bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-sm text-gray-900 dark:text-gray-100 text-center focus:border-indigo-500 focus:outline-none"
               />
             </div>
             <div className="flex items-center gap-2">
@@ -978,7 +978,7 @@ export default function EtsySpy() {
                 min={0}
                 value={priceRange[0]}
                 onChange={(e) => setPriceRange([Math.max(0, parseInt(e.target.value) || 0), priceRange[1]])}
-                className="w-16 bg-slate-800/80 border border-slate-600/50 rounded-lg px-2 py-2 text-sm text-gray-100 text-center focus:border-indigo-500 focus:outline-none"
+                className="w-16 bg-slate-800/80 border border-slate-600/50 rounded-lg px-2 py-2 text-sm text-gray-900 dark:text-gray-100 text-center focus:border-indigo-500 focus:outline-none"
                 placeholder="Min"
               />
               <span className="text-slate-600">-</span>
@@ -987,7 +987,7 @@ export default function EtsySpy() {
                 min={0}
                 value={priceRange[1]}
                 onChange={(e) => setPriceRange([priceRange[0], Math.max(0, parseInt(e.target.value) || 0)])}
-                className="w-16 bg-slate-800/80 border border-slate-600/50 rounded-lg px-2 py-2 text-sm text-gray-100 text-center focus:border-indigo-500 focus:outline-none"
+                className="w-16 bg-slate-800/80 border border-slate-600/50 rounded-lg px-2 py-2 text-sm text-gray-900 dark:text-gray-100 text-center focus:border-indigo-500 focus:outline-none"
                 placeholder="Max"
               />
             </div>
@@ -1038,7 +1038,7 @@ export default function EtsySpy() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-sm font-medium text-gray-200 mb-3 leading-snug" title={title}>
+                    <h3 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-3 leading-snug" title={title}>
                       {title}
                     </h3>
 
@@ -1091,7 +1091,7 @@ export default function EtsySpy() {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 text-center bg-slate-700/60 hover:bg-slate-700/70 text-gray-300 hover:text-white py-2 rounded-lg text-xs font-medium transition-colors"
+                        className="flex-1 text-center bg-slate-700/60 hover:bg-gray-100 dark:hover:bg-slate-700/70 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white py-2 rounded-lg text-xs font-medium transition-colors"
                       >
                         View on Etsy
                       </a>
@@ -1100,7 +1100,7 @@ export default function EtsySpy() {
                         className={`px-3 py-2 rounded-lg text-xs transition-colors ${
                           pref === "liked"
                             ? "bg-green-600 text-white"
-                            : "bg-slate-700/60 hover:bg-green-600/60 text-slate-400 hover:text-white"
+                            : "bg-slate-700/60 hover:bg-green-600/60 text-slate-400 hover:text-gray-900 dark:hover:text-white"
                         }`}
                         title="Like (save to Brain)"
                       >
@@ -1111,7 +1111,7 @@ export default function EtsySpy() {
                         className={`px-3 py-2 rounded-lg text-xs transition-colors ${
                           pref === "passed"
                             ? "bg-red-600 text-white"
-                            : "bg-slate-700/60 hover:bg-red-600/60 text-slate-400 hover:text-white"
+                            : "bg-slate-700/60 hover:bg-red-600/60 text-slate-400 hover:text-gray-900 dark:hover:text-white"
                         }`}
                         title="Pass (not interested)"
                       >
@@ -1127,7 +1127,7 @@ export default function EtsySpy() {
       )}
 
       {/* ════════════ SECTION 4: Shop Spy ════════════ */}
-      <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
         <SectionHeader>
           <span className="text-xl">🕵️</span> Shop Spy
         </SectionHeader>
@@ -1139,12 +1139,12 @@ export default function EtsySpy() {
             onChange={(e) => setShopUrl(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSpyShop()}
             placeholder="Enter Etsy shop URL (e.g. https://www.etsy.com/shop/ShopName)..."
-            className="flex-1 bg-slate-800/80 border border-slate-600/50 rounded-lg px-4 py-3 text-gray-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+            className="flex-1 bg-slate-800/80 border border-slate-600/50 rounded-lg px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
           />
           <button
             onClick={handleSpyShop}
             disabled={spying || !shopUrl.trim()}
-            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-8 py-3 rounded-lg font-medium flex items-center gap-2 transition-colors whitespace-nowrap"
+            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 dark:text-white px-8 py-3 rounded-lg font-medium flex items-center gap-2 transition-colors whitespace-nowrap"
           >
             {spying ? <Spinner /> : <span>🕵️</span>}
             {spying ? "Analyzing Shop..." : "Spy on Shop"}
@@ -1213,12 +1213,12 @@ export default function EtsySpy() {
                     onChange={(e) => setShopNotes(e.target.value)}
                     placeholder="Notes about this shop..."
                     rows={2}
-                    className="bg-gray-900 border border-slate-700/50 rounded-lg px-3 py-2 text-xs text-gray-300 placeholder-slate-600 focus:border-indigo-500 focus:outline-none resize-none w-56"
+                    className="bg-gray-900 border border-slate-700/50 rounded-lg px-3 py-2 text-xs text-gray-600 dark:text-gray-300 placeholder-slate-600 focus:border-indigo-500 focus:outline-none resize-none w-56"
                   />
                   <button
                     onClick={handleBookmarkShop}
                     disabled={bookmarkLoading === "add"}
-                    className="bg-yellow-600 hover:bg-yellow-500 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1.5 transition-colors"
+                    className="bg-yellow-600 hover:bg-yellow-500 disabled:opacity-50 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1.5 transition-colors"
                   >
                     {bookmarkLoading === "add" ? <Spinner /> : <span>⭐</span>}
                     Bookmark Shop
@@ -1257,12 +1257,12 @@ export default function EtsySpy() {
                       {shopAnalysis.bestsellers.map((p, i) => (
                         <div
                           key={i}
-                          className="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-700/70/30 transition-colors border-b border-slate-700/50/30 last:border-0"
+                          className="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/70/30 transition-colors border-b border-slate-700/50/30 last:border-0"
                         >
                           <div className="flex items-center gap-3 flex-1 min-w-0">
                             <span className="text-xs font-bold text-slate-600 w-6">#{i + 1}</span>
                             <div className="min-w-0 flex-1">
-                              <p className="text-sm text-gray-300 truncate">{p.title || "Untitled"}</p>
+                              <p className="text-sm text-gray-600 dark:text-gray-300 truncate">{p.title || "Untitled"}</p>
                               <span
                                 className={`${classifyProduct(p.title).color} px-1.5 py-0 rounded text-[9px] font-medium`}
                               >
@@ -1295,11 +1295,11 @@ export default function EtsySpy() {
                         shopAnalysis.newArrivals.map((p, i) => (
                           <div
                             key={i}
-                            className="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-700/70/30 transition-colors border-b border-slate-700/50/30 last:border-0"
+                            className="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700/70/30 transition-colors border-b border-slate-700/50/30 last:border-0"
                           >
                             <div className="flex items-center gap-3 flex-1 min-w-0">
                               <div className="min-w-0 flex-1">
-                                <p className="text-sm text-gray-300 truncate">{p.title || "Untitled"}</p>
+                                <p className="text-sm text-gray-600 dark:text-gray-300 truncate">{p.title || "Untitled"}</p>
                                 <span
                                   className={`${classifyProduct(p.title).color} px-1.5 py-0 rounded text-[9px] font-medium`}
                                 >
@@ -1341,15 +1341,15 @@ export default function EtsySpy() {
                                 <span className={`${pt.color} px-2 py-0.5 rounded text-[10px] font-semibold`}>
                                   {type}
                                 </span>
-                                <p className="text-2xl font-bold text-gray-200 mt-2">{count}</p>
-                                <p className="text-[10px] text-slate-500">{pct}% of listings</p>
+                                <p className="text-2xl font-bold text-gray-800 dark:text-gray-200 mt-2">{count}</p>
+                                <p className="text-[10px] text-gray-400 dark:text-slate-500">{pct}% of listings</p>
                               </div>
                             );
                           })}
                       </div>
 
                       <div className="bg-gray-900/40 rounded-lg p-4 mt-4">
-                        <h4 className="text-sm font-semibold text-gray-300 mb-3">Distribution</h4>
+                        <h4 className="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-3">Distribution</h4>
                         <div className="flex h-6 rounded-full overflow-hidden">
                           {Object.entries(shopAnalysis.types)
                             .sort(([, a], [, b]) => b - a)
@@ -1373,7 +1373,7 @@ export default function EtsySpy() {
                                   style={{ width: `${pct}%` }}
                                   title={`${type}: ${count} (${pct.toFixed(0)}%)`}
                                 >
-                                  <div className="absolute hidden group-hover:block bottom-full left-1/2 -translate-x-1/2 mb-1 bg-gray-900 text-xs text-white px-2 py-1 rounded whitespace-nowrap z-10">
+                                  <div className="absolute hidden group-hover:block bottom-full left-1/2 -translate-x-1/2 mb-1 bg-gray-900 text-xs text-gray-900 dark:text-white px-2 py-1 rounded whitespace-nowrap z-10">
                                     {type}: {count}
                                   </div>
                                 </div>
@@ -1419,7 +1419,7 @@ export default function EtsySpy() {
           onClick={() => setBookmarksOpen(!bookmarksOpen)}
           className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-slate-800/50 transition-colors"
         >
-          <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
             <span>⭐</span> Bookmarked Shops
             <span className="text-xs font-normal bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">
               {bookmarks.length}
@@ -1477,14 +1477,14 @@ export default function EtsySpy() {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => setExpandedBookmark(isExpanded ? null : bmId)}
-                          className="bg-slate-700/60 hover:bg-slate-700/70 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                          className="bg-slate-700/60 hover:bg-gray-100 dark:hover:bg-slate-700/70 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
                         >
                           {isExpanded ? "Collapse" : "View Details"}
                         </button>
                         <button
                           onClick={() => handleRescanBookmark(bm)}
                           disabled={bookmarkLoading === bmId}
-                          className="bg-indigo-600/60 hover:bg-indigo-500 disabled:opacity-50 text-white px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors"
+                          className="bg-indigo-600/60 hover:bg-indigo-500 disabled:opacity-50 text-gray-900 dark:text-white px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors"
                         >
                           {bookmarkLoading === bmId ? <Spinner className="h-3 w-3" /> : null}
                           Re-scan
@@ -1492,7 +1492,7 @@ export default function EtsySpy() {
                         <button
                           onClick={() => handleRemoveBookmark(bmId)}
                           disabled={bookmarkLoading === bmId}
-                          className="bg-red-600/40 hover:bg-red-500 disabled:opacity-50 text-red-300 hover:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                          className="bg-red-600/40 hover:bg-red-500 disabled:opacity-50 text-red-300 hover:text-gray-900 dark:hover:text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
                         >
                           Remove
                         </button>
@@ -1515,7 +1515,7 @@ export default function EtsySpy() {
                               }
                               placeholder="Add notes about this shop..."
                               rows={2}
-                              className="flex-1 bg-gray-900 border border-slate-700/50 rounded-lg px-3 py-2 text-xs text-gray-300 placeholder-slate-600 focus:border-indigo-500 focus:outline-none resize-none"
+                              className="flex-1 bg-gray-900 border border-slate-700/50 rounded-lg px-3 py-2 text-xs text-gray-600 dark:text-gray-300 placeholder-slate-600 focus:border-indigo-500 focus:outline-none resize-none"
                             />
                             {editingNotes[bmId] !== undefined && editingNotes[bmId] !== (bm.notes || "") && (
                               <button
@@ -1527,7 +1527,7 @@ export default function EtsySpy() {
                                     return n;
                                   });
                                 }}
-                                className="bg-indigo-600 hover:bg-indigo-500 text-white px-3 rounded-lg text-xs self-end transition-colors"
+                                className="bg-indigo-600 hover:bg-indigo-500 text-gray-900 dark:text-white px-3 rounded-lg text-xs self-end transition-colors"
                               >
                                 Save
                               </button>
@@ -1559,7 +1559,7 @@ export default function EtsySpy() {
 
       {/* ════════════ Preferences summary (bottom) ════════════ */}
       {(preferences.liked.length > 0 || preferences.passed.length > 0) && (
-        <div className="bg-gray-900 rounded-2xl p-6 border border-slate-700/40">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-700/40">
           <SectionHeader
             extra={
               <button

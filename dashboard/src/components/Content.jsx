@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { useData } from "../context/DataContext.jsx";
+import { useNotifications } from "../context/NotificationContext.jsx";
 import { getContentMetrics, getNicheMetrics, NICHES } from "../data/seedData.js";
 import { fmt, NICHE_COLORS } from "../utils/formatters.js";
 
@@ -115,6 +116,17 @@ function ContentCalendar() {
 
 export default function Content({ filters }) {
   const { stores, contentLogs, addContentLog, deleteContentLog } = useData();
+  const { notify } = useNotifications();
+
+  function handleAddContent(entry) {
+    addContentLog(entry);
+    notify(`Content logged: "${entry.title}"`, "success");
+  }
+
+  function handleDeleteContent(id) {
+    deleteContentLog(id);
+    notify("Content log removed", "info");
+  }
   const contentMetrics = useMemo(() => getContentMetrics(), []);
   const nicheMetrics = useMemo(() => getNicheMetrics(), []);
 
@@ -182,7 +194,7 @@ export default function Content({ filters }) {
       </div>
 
       {/* Content Log Form */}
-      <ContentLogForm onSubmit={addContentLog} stores={stores} />
+      <ContentLogForm onSubmit={handleAddContent} stores={stores} />
 
       {/* Content Calendar */}
       <ContentCalendar />
@@ -195,9 +207,9 @@ export default function Content({ filters }) {
             <BarChart data={bucketData}>
               <XAxis dataKey="label" tick={{ fill: "#6b7280", fontSize: 11 }} tickLine={false} />
               <YAxis tick={{ fill: "#6b7280", fontSize: 10 }} tickLine={false} />
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} formatter={(val) => [val + " stores", "Count"]} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} formatter={(val) => [val + " stores", "Count"]} />
               <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                {bucketData.map((entry, i) => <rect key={i} fill={entry.color} />)}
+                {bucketData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
@@ -208,7 +220,7 @@ export default function Content({ filters }) {
             <BarChart data={nichePostData} layout="vertical" margin={{ left: 60 }}>
               <XAxis type="number" tick={{ fill: "#6b7280", fontSize: 10 }} tickLine={false} />
               <YAxis type="category" dataKey="name" tick={{ fill: "#9ca3af", fontSize: 10 }} tickLine={false} width={60} />
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} formatter={(val) => [val, "Posts"]} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} formatter={(val) => [val, "Posts"]} />
               <Bar dataKey="posts" fill="#6366f1" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -269,7 +281,7 @@ export default function Content({ filters }) {
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-xs text-gray-500">{new Date(log.logged_at).toLocaleDateString()}</span>
-                  <button onClick={() => deleteContentLog(log.id)} className="text-xs text-gray-600 hover:text-red-400 transition-colors">&times;</button>
+                  <button onClick={() => handleDeleteContent(log.id)} className="text-xs text-gray-600 hover:text-red-400 transition-colors">&times;</button>
                 </div>
               </div>
             ))}

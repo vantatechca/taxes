@@ -243,7 +243,7 @@ function ErrorMsg({ message, onRetry, onDismiss }) {
 function ProgressBar({ value, max = 100, color = "bg-indigo-500", height = "h-2" }) {
   const pct = Math.min(100, Math.max(0, (value / max) * 100));
   return (
-    <div className={`w-full bg-slate-700/50 rounded-full ${height} overflow-hidden`}>
+    <div className={`w-full bg-gray-100 dark:bg-slate-700/50 rounded-full ${height} overflow-hidden`}>
       <div className={`${color} ${height} rounded-full transition-all duration-500`} style={{ width: `${pct}%` }} />
     </div>
   );
@@ -394,7 +394,7 @@ function NicheValidator({ sharedKeyword, setSharedKeyword, sharedNiche, setShare
     <div className="space-y-6">
       {/* Input Bar */}
       <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
-        <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
           <span>🎯</span> Niche Validator
         </h2>
         <p className="text-slate-400 text-sm mb-4">
@@ -407,12 +407,12 @@ function NicheValidator({ sharedKeyword, setSharedKeyword, sharedNiche, setShare
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && validate()}
             placeholder="e.g. wedding budget spreadsheet"
-            className="flex-1 bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-indigo-500 placeholder-slate-500"
+            className="flex-1 bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-2 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-indigo-500 placeholder-gray-400 dark:placeholder-slate-500"
           />
           <select
             value={niche}
             onChange={(e) => setNiche(e.target.value)}
-            className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-indigo-500"
+            className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-2 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-indigo-500"
           >
             {NICHES.map((n) => (
               <option key={n.id} value={n.id}>{n.emoji} {n.name}</option>
@@ -421,7 +421,7 @@ function NicheValidator({ sharedKeyword, setSharedKeyword, sharedNiche, setShare
           <button
             onClick={validate}
             disabled={loading || !keyword.trim()}
-            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 whitespace-nowrap"
+            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-gray-900 dark:text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 whitespace-nowrap"
           >
             {loading ? <><Spinner /> Validating...</> : "Validate"}
           </button>
@@ -439,18 +439,18 @@ function NicheValidator({ sharedKeyword, setSharedKeyword, sharedNiche, setShare
               <div className="flex items-center gap-4">
                 <div className="text-5xl font-black text-white">{overallScore}</div>
                 <div>
-                  <div className="text-lg font-bold text-white mb-1">Marketing Score</div>
+                  <div className="text-lg font-bold text-gray-900 dark:text-white mb-1">Marketing Score</div>
                   <VerdictBadge score={overallScore} />
                 </div>
               </div>
               <div className="flex items-center gap-2 flex-wrap">
-                <button onClick={saveReport} disabled={saving || saved} className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+                <button onClick={saveReport} disabled={saving || saved} className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2">
                   {saving ? <><Spinner /> Saving...</> : saved ? "✅ Saved" : "💾 Save Report"}
                 </button>
-                <button onClick={goToDomains} className="bg-slate-700 hover:bg-slate-600 text-gray-300 px-3 py-1.5 rounded-lg text-sm">
+                <button onClick={goToDomains} className="bg-slate-700 hover:bg-slate-600 text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg text-sm">
                   🌐 Domain Scan
                 </button>
-                <button onClick={goToBlog} className="bg-slate-700 hover:bg-slate-600 text-gray-300 px-3 py-1.5 rounded-lg text-sm">
+                <button onClick={goToBlog} className="bg-slate-700 hover:bg-slate-600 text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg text-sm">
                   📝 Blog Plan
                 </button>
               </div>
@@ -459,7 +459,7 @@ function NicheValidator({ sharedKeyword, setSharedKeyword, sharedNiche, setShare
 
           {/* Score Breakdown */}
           <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2 mb-4">Score Breakdown</h3>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-4">Score Breakdown</h3>
             <div className="space-y-3">
               {SCORE_COMPONENTS.map((comp) => {
                 const val = components[comp.key] ?? 0;
@@ -480,21 +480,21 @@ function NicheValidator({ sharedKeyword, setSharedKeyword, sharedNiche, setShare
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-4 text-center">
               <div className="text-2xl font-bold text-indigo-400">{summary.availableCities ?? "—"}/50</div>
-              <div className="text-sm text-slate-400 mt-1">Cities with .com available</div>
+              <div className="text-sm text-gray-500 dark:text-slate-400 mt-1">Cities with .com available</div>
             </div>
             <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-4 text-center">
               <div className="text-2xl font-bold text-green-400">${summary.estCPC ?? "—"}</div>
-              <div className="text-sm text-slate-400 mt-1">Estimated CPC</div>
+              <div className="text-sm text-gray-500 dark:text-slate-400 mt-1">Estimated CPC</div>
             </div>
             <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-4 text-center">
               <div className="text-2xl font-bold text-amber-400">{summary.monthlySearches ? summary.monthlySearches.toLocaleString() : "—"}</div>
-              <div className="text-sm text-slate-400 mt-1">Monthly Searches</div>
+              <div className="text-sm text-gray-500 dark:text-slate-400 mt-1">Monthly Searches</div>
             </div>
           </div>
 
           {/* Launch Sequence */}
           <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
               🚀 Launch Sequence
             </h3>
             <p className="text-slate-400 text-sm mb-4">
@@ -645,7 +645,7 @@ function DomainScanner({ sharedKeyword, setSharedKeyword }) {
   return (
     <div className="space-y-6">
       <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
-        <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
           <span>🌐</span> Domain Scanner
         </h2>
         <p className="text-slate-400 text-sm mb-4">
@@ -658,12 +658,12 @@ function DomainScanner({ sharedKeyword, setSharedKeyword }) {
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && scan()}
             placeholder="e.g. wedding budget"
-            className="flex-1 bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-indigo-500 placeholder-slate-500"
+            className="flex-1 bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-2 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-indigo-500 placeholder-gray-400 dark:placeholder-slate-500"
           />
           <button
             onClick={scan}
             disabled={loading || !keyword.trim()}
-            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 whitespace-nowrap"
+            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-gray-900 dark:text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 whitespace-nowrap"
           >
             {loading ? <><Spinner /> Scanning...</> : "Scan All 50 Cities"}
           </button>
@@ -710,7 +710,7 @@ function DomainScanner({ sharedKeyword, setSharedKeyword }) {
                 <span className="text-slate-600">|</span>
                 <span className="text-indigo-400 font-medium">{stats.total} total available</span>
               </div>
-              <button onClick={exportCsv} className="bg-slate-700 hover:bg-slate-600 text-gray-300 px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5">
+              <button onClick={exportCsv} className="bg-slate-700 hover:bg-slate-600 text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5">
                 📋 Export CSV
               </button>
             </div>
@@ -724,18 +724,18 @@ function DomainScanner({ sharedKeyword, setSharedKeyword }) {
                   <tr className="border-b border-slate-700/50">
                     <th
                       onClick={() => toggleSort("city")}
-                      className="text-left px-4 py-3 text-slate-400 font-medium cursor-pointer hover:text-white select-none"
+                      className="text-left px-4 py-3 text-gray-500 dark:text-slate-400 font-medium cursor-pointer hover:text-gray-900 dark:hover:text-white select-none"
                     >
                       City {sortBy === "city" && (sortDir === "asc" ? "↑" : "↓")}
                     </th>
                     {selectedTlds.map((tld) => (
-                      <th key={tld} className="text-center px-4 py-3 text-slate-400 font-medium">
+                      <th key={tld} className="text-center px-4 py-3 text-gray-500 dark:text-slate-400 font-medium">
                         {slugify(keyword.trim())}+city{tld}
                       </th>
                     ))}
                     <th
                       onClick={() => toggleSort("available")}
-                      className="text-center px-4 py-3 text-slate-400 font-medium cursor-pointer hover:text-white select-none"
+                      className="text-center px-4 py-3 text-gray-500 dark:text-slate-400 font-medium cursor-pointer hover:text-gray-900 dark:hover:text-white select-none"
                     >
                       Status {sortBy === "available" && (sortDir === "asc" ? "↑" : "↓")}
                     </th>
@@ -745,8 +745,8 @@ function DomainScanner({ sharedKeyword, setSharedKeyword }) {
                   {sortedResults.map((d) => {
                     const anyAvail = selectedTlds.some((t) => d.tlds?.[t] === "available");
                     return (
-                      <tr key={d.city} className="border-b border-slate-800/50 hover:bg-slate-700/20">
-                        <td className="px-4 py-2.5 text-white font-medium">{d.city}</td>
+                      <tr key={d.city} className="border-b border-slate-800/50 hover:bg-gray-200 dark:hover:bg-slate-700/20">
+                        <td className="px-4 py-2.5 text-gray-900 dark:text-white font-medium">{d.city}</td>
                         {selectedTlds.map((tld) => {
                           const status = d.tlds?.[tld];
                           const avail = status === "available";
@@ -893,7 +893,7 @@ function KeywordLab({ sharedKeyword, setSharedKeyword, setActiveTab }) {
   return (
     <div className="space-y-6">
       <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
-        <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
           <span>🔍</span> Keyword Lab
         </h2>
         <p className="text-slate-400 text-sm mb-4">
@@ -906,12 +906,12 @@ function KeywordLab({ sharedKeyword, setSharedKeyword, setActiveTab }) {
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && research()}
             placeholder="e.g. budget planner template"
-            className="flex-1 bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-indigo-500 placeholder-slate-500"
+            className="flex-1 bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-2 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-indigo-500 placeholder-gray-400 dark:placeholder-slate-500"
           />
           <button
             onClick={research}
             disabled={loading || !keyword.trim()}
-            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2"
+            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-gray-900 dark:text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2"
           >
             {loading ? <><Spinner /> Researching...</> : "Research"}
           </button>
@@ -924,7 +924,7 @@ function KeywordLab({ sharedKeyword, setSharedKeyword, setActiveTab }) {
       {autocomplete.length > 0 && (
         <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
           <button onClick={() => setAcOpen(!acOpen)} className="w-full flex items-center justify-between">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
               ✨ Autocomplete Suggestions
               <span className="text-xs font-normal text-slate-500">({autocomplete.length})</span>
             </h3>
@@ -936,7 +936,7 @@ function KeywordLab({ sharedKeyword, setSharedKeyword, setActiveTab }) {
                 <div key={i} className="flex items-center gap-1">
                   <button
                     onClick={() => deepDive(s)}
-                    className="bg-slate-700/60 hover:bg-indigo-900/40 border border-slate-600/40 hover:border-indigo-500/30 text-slate-200 px-3 py-1.5 rounded-lg text-sm transition-colors"
+                    className="bg-slate-700/60 hover:bg-indigo-900/40 border border-slate-600/40 hover:border-indigo-500/30 text-gray-700 dark:text-slate-200 px-3 py-1.5 rounded-lg text-sm transition-colors"
                   >
                     {s}
                   </button>
@@ -958,7 +958,7 @@ function KeywordLab({ sharedKeyword, setSharedKeyword, setActiveTab }) {
       {paa.length > 0 && (
         <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
           <button onClick={() => setPaaOpen(!paaOpen)} className="w-full flex items-center justify-between">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
               ❓ People Also Ask
               <span className="text-xs font-normal text-slate-500">({paa.length})</span>
             </h3>
@@ -975,10 +975,10 @@ function KeywordLab({ sharedKeyword, setSharedKeyword, setActiveTab }) {
                   <div key={i} className="border border-slate-700/30 rounded-lg overflow-hidden">
                     <button
                       onClick={() => setExpandedPaa((prev) => ({ ...prev, [i]: !prev[i] }))}
-                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-slate-700/20 transition-colors"
+                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-200 dark:hover:bg-slate-700/20 transition-colors"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="text-sm text-white text-left">{question}</span>
+                        <span className="text-sm text-gray-900 dark:text-white text-left">{question}</span>
                         <span className={`text-xs px-2 py-0.5 rounded ${vol.cls}`}>{vol.label}</span>
                       </div>
                       <div className="flex items-center gap-2">
@@ -1009,7 +1009,7 @@ function KeywordLab({ sharedKeyword, setSharedKeyword, setActiveTab }) {
       {related.length > 0 && (
         <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
           <button onClick={() => setRelOpen(!relOpen)} className="w-full flex items-center justify-between">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
               🔗 Related Searches
               <span className="text-xs font-normal text-slate-500">({related.length})</span>
             </h3>
@@ -1021,7 +1021,7 @@ function KeywordLab({ sharedKeyword, setSharedKeyword, setActiveTab }) {
                 <div key={i} className="flex items-center gap-1">
                   <button
                     onClick={() => deepDive(r)}
-                    className="flex-1 bg-slate-700/60 hover:bg-indigo-900/40 border border-slate-600/40 hover:border-indigo-500/30 text-slate-200 px-3 py-1.5 rounded-lg text-sm transition-colors text-left truncate"
+                    className="flex-1 bg-slate-700/60 hover:bg-indigo-900/40 border border-slate-600/40 hover:border-indigo-500/30 text-gray-700 dark:text-slate-200 px-3 py-1.5 rounded-lg text-sm transition-colors text-left truncate"
                   >
                     {r}
                   </button>
@@ -1042,7 +1042,7 @@ function KeywordLab({ sharedKeyword, setSharedKeyword, setActiveTab }) {
       {/* DataForSEO Panel */}
       <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
         <button onClick={() => setDfOpen(!dfOpen)} className="w-full flex items-center justify-between">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
             📊 DataForSEO Panel
             <span className="text-xs font-normal text-slate-500">(Volume & CPC data)</span>
           </h3>
@@ -1051,31 +1051,31 @@ function KeywordLab({ sharedKeyword, setSharedKeyword, setActiveTab }) {
         {dfOpen && (
           <div className="mt-4 space-y-4">
             <div>
-              <label className="block text-sm text-slate-400 mb-1">API Key (saved locally)</label>
+              <label className="block text-sm text-gray-500 dark:text-slate-400 mb-1">API Key (saved locally)</label>
               <input
                 type="password"
                 value={dfKey}
                 onChange={(e) => saveDfKey(e.target.value)}
                 placeholder="Your DataForSEO API key"
-                className="w-full bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-indigo-500 placeholder-slate-500"
+                className="w-full bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-2 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-indigo-500 placeholder-gray-400 dark:placeholder-slate-500"
               />
             </div>
             {dfKey && (
               <>
                 <div>
-                  <label className="block text-sm text-slate-400 mb-1">Bulk Keywords (one per line)</label>
+                  <label className="block text-sm text-gray-500 dark:text-slate-400 mb-1">Bulk Keywords (one per line)</label>
                   <textarea
                     value={dfKeywords}
                     onChange={(e) => setDfKeywords(e.target.value)}
                     rows={5}
                     placeholder={"wedding budget spreadsheet\nwedding planner template\nwedding checklist"}
-                    className="w-full bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-indigo-500 placeholder-slate-500 font-mono text-sm"
+                    className="w-full bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-2 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-indigo-500 placeholder-gray-400 dark:placeholder-slate-500 font-mono text-sm"
                   />
                 </div>
                 <button
                   onClick={bulkResearch}
                   disabled={dfLoading || !dfKeywords.trim()}
-                  className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2"
+                  className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2"
                 >
                   {dfLoading ? <><Spinner /> Fetching...</> : "Bulk Research"}
                 </button>
@@ -1094,7 +1094,7 @@ function KeywordLab({ sharedKeyword, setSharedKeyword, setActiveTab }) {
                       </thead>
                       <tbody>
                         {dfResults.map((r, i) => (
-                          <tr key={i} className="border-b border-slate-800/50 hover:bg-slate-700/20">
+                          <tr key={i} className="border-b border-slate-800/50 hover:bg-gray-200 dark:hover:bg-slate-700/20">
                             <td className="px-3 py-2 text-white">{r.keyword}</td>
                             <td className="px-3 py-2 text-right text-indigo-400">{r.volume?.toLocaleString() ?? "—"}</td>
                             <td className="px-3 py-2 text-right text-green-400">${r.cpc?.toFixed(2) ?? "—"}</td>
@@ -1235,7 +1235,7 @@ function BlogPlanner({ sharedKeyword, sharedNiche, setSharedKeyword }) {
   return (
     <div className="space-y-6">
       <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
-        <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
           <span>📝</span> Blog Planner
         </h2>
         <p className="text-slate-400 text-sm mb-4">
@@ -1248,12 +1248,12 @@ function BlogPlanner({ sharedKeyword, sharedNiche, setSharedKeyword }) {
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && generate()}
             placeholder="e.g. wedding budget spreadsheet"
-            className="flex-1 bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-indigo-500 placeholder-slate-500"
+            className="flex-1 bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-2 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-indigo-500 placeholder-gray-400 dark:placeholder-slate-500"
           />
           <select
             value={niche}
             onChange={(e) => setNiche(e.target.value)}
-            className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-indigo-500"
+            className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-2 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-indigo-500"
           >
             {NICHES.map((n) => (
               <option key={n.id} value={n.id}>{n.emoji} {n.name}</option>
@@ -1266,12 +1266,12 @@ function BlogPlanner({ sharedKeyword, sharedNiche, setSharedKeyword }) {
             value={product}
             onChange={(e) => setProduct(e.target.value)}
             placeholder="Product name (optional, for mapping)"
-            className="flex-1 bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-indigo-500 placeholder-slate-500"
+            className="flex-1 bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-2 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-indigo-500 placeholder-gray-400 dark:placeholder-slate-500"
           />
           <button
             onClick={generate}
             disabled={loading || !keyword.trim()}
-            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 whitespace-nowrap"
+            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-gray-900 dark:text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 whitespace-nowrap"
           >
             {loading ? <><Spinner /> Generating...</> : "Generate Content Plan"}
           </button>
@@ -1284,13 +1284,13 @@ function BlogPlanner({ sharedKeyword, sharedNiche, setSharedKeyword }) {
       {calendar.length > 0 && (
         <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
               📅 Content Calendar
               <span className="text-xs font-normal text-slate-500">({calendar.length} posts)</span>
             </h3>
             <button
               onClick={exportCalendar}
-              className="bg-slate-700 hover:bg-slate-600 text-gray-300 px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5"
+              className="bg-slate-700 hover:bg-slate-600 text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5"
             >
               📋 Export Calendar
             </button>
@@ -1299,19 +1299,19 @@ function BlogPlanner({ sharedKeyword, sharedNiche, setSharedKeyword }) {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-slate-700/50">
-                  <th className="text-left px-3 py-2 text-slate-400 w-16">Week</th>
+                  <th className="text-left px-3 py-2 text-gray-500 dark:text-slate-400 w-16">Week</th>
                   <th className="text-left px-3 py-2 text-slate-400">Blog Title</th>
                   <th className="text-left px-3 py-2 text-slate-400">Target Keyword</th>
                   <th className="text-center px-3 py-2 text-slate-400">Type</th>
                   <th className="text-center px-3 py-2 text-slate-400">Volume</th>
                   <th className="text-left px-3 py-2 text-slate-400">Product</th>
-                  <th className="text-center px-3 py-2 text-slate-400 w-10"></th>
+                  <th className="text-center px-3 py-2 text-gray-500 dark:text-slate-400 w-10"></th>
                 </tr>
               </thead>
               <tbody>
                 {calendar.map((c, i) => (
-                  <tr key={i} className="border-b border-slate-800/50 hover:bg-slate-700/20">
-                    <td className="px-3 py-2.5 text-slate-400 font-mono text-xs">W{c.week || Math.floor(i / 2) + 1}</td>
+                  <tr key={i} className="border-b border-slate-800/50 hover:bg-gray-200 dark:hover:bg-slate-700/20">
+                    <td className="px-3 py-2.5 text-gray-500 dark:text-slate-400 font-mono text-xs">W{c.week || Math.floor(i / 2) + 1}</td>
                     <td className="px-3 py-2.5 text-white">{c.title}</td>
                     <td className="px-3 py-2.5 text-indigo-400 text-xs">{c.targetKeyword || keyword.trim()}</td>
                     <td className="px-3 py-2.5 text-center">
@@ -1325,7 +1325,7 @@ function BlogPlanner({ sharedKeyword, sharedNiche, setSharedKeyword }) {
                         c.volume === "Medium" ? "text-yellow-400" : "text-slate-400"
                       }`}>{c.volume || "—"}</span>
                     </td>
-                    <td className="px-3 py-2.5 text-slate-300 text-xs">{c.product || "—"}</td>
+                    <td className="px-3 py-2.5 text-gray-600 dark:text-slate-300 text-xs">{c.product || "—"}</td>
                     <td className="px-3 py-2.5 text-center">
                       <button
                         onClick={() => removeFromCalendar(i)}
@@ -1346,14 +1346,14 @@ function BlogPlanner({ sharedKeyword, sharedNiche, setSharedKeyword }) {
       {/* Quick Topic Ideas */}
       <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
             💡 Quick Topic Ideas
           </h3>
           {quickTopics.length === 0 && (
             <button
               onClick={loadQuickTopics}
               disabled={topicLoading || !keyword.trim()}
-              className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-gray-300 px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5"
+              className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5"
             >
               {topicLoading ? <><Spinner /> Loading...</> : "Load Topics"}
             </button>
@@ -1365,7 +1365,7 @@ function BlogPlanner({ sharedKeyword, sharedNiche, setSharedKeyword }) {
               <button
                 key={i}
                 onClick={() => addToCalendar(t)}
-                className="text-left bg-slate-900/40 hover:bg-indigo-900/20 border border-slate-700/30 hover:border-indigo-500/30 rounded-lg px-3 py-2.5 text-sm text-slate-200 transition-colors group"
+                className="text-left bg-slate-900/40 hover:bg-indigo-900/20 border border-slate-700/30 hover:border-indigo-500/30 rounded-lg px-3 py-2.5 text-sm text-gray-700 dark:text-slate-200 transition-colors group"
               >
                 <span>{t}</span>
                 <span className="text-xs text-indigo-400 opacity-0 group-hover:opacity-100 ml-2">+ Add to calendar</span>
@@ -1429,7 +1429,7 @@ function GMBAdvisor({ sharedNiche }) {
   return (
     <div className="space-y-6">
       <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
-        <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
           <span>🏪</span> GMB Advisor
         </h2>
         <p className="text-slate-400 text-sm mb-4">
@@ -1443,7 +1443,7 @@ function GMBAdvisor({ sharedNiche }) {
               setSelectedNiche(e.target.value);
               setExpandedNiches((prev) => ({ ...prev, [e.target.value]: true }));
             }}
-            className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-2 text-gray-200 focus:outline-none focus:border-indigo-500"
+            className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-2 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-indigo-500"
           >
             {NICHES.map((n) => (
               <option key={n.id} value={n.id}>{n.emoji} {n.name}</option>
@@ -1456,7 +1456,7 @@ function GMBAdvisor({ sharedNiche }) {
 
       {/* Launch Checklist */}
       <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
-        <h3 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
           ✅ GMB Launch Checklist
         </h3>
         <div className="space-y-2">
@@ -1479,7 +1479,7 @@ function GMBAdvisor({ sharedNiche }) {
             <div key={n.id} className="bg-slate-800/40 border border-slate-700/30 rounded-xl overflow-hidden">
               <button
                 onClick={() => { toggleNiche(n.id); fetchCategories(n.id); }}
-                className="w-full flex items-center justify-between px-6 py-4 hover:bg-slate-700/20 transition-colors"
+                className="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-200 dark:hover:bg-slate-700/20 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <span className="text-xl">{n.emoji}</span>
@@ -1492,14 +1492,14 @@ function GMBAdvisor({ sharedNiche }) {
                 <div className="px-6 pb-6 space-y-4">
                   {/* Categories */}
                   <div>
-                    <h4 className="text-sm font-semibold text-slate-300 mb-3">Recommended Categories</h4>
+                    <h4 className="text-sm font-semibold text-gray-600 dark:text-slate-300 mb-3">Recommended Categories</h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       {cats.map((cat, i) => (
                         <div key={i} className="bg-slate-900/40 border border-slate-700/30 rounded-lg p-4">
                           <div className="flex items-center justify-between mb-2">
                             <span className="text-sm font-medium text-white">{cat.name}</span>
                             <span className={`text-xs px-2 py-0.5 rounded ${
-                              cat.relevance === "Primary" ? "bg-indigo-900/40 text-indigo-400 border border-indigo-500/30" : "bg-slate-700/40 text-slate-400 border border-slate-600/30"
+                              cat.relevance === "Primary" ? "bg-indigo-900/40 text-indigo-400 border border-indigo-500/30" : "bg-slate-700/40 text-gray-500 dark:text-slate-400 border border-slate-600/30"
                             }`}>{cat.relevance}</span>
                           </div>
                           <p className="text-xs text-slate-500">{cat.why}</p>
@@ -1510,7 +1510,7 @@ function GMBAdvisor({ sharedNiche }) {
                   {/* Review Strategy */}
                   {tips.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-300 mb-3">Review Strategy</h4>
+                      <h4 className="text-sm font-semibold text-gray-600 dark:text-slate-300 mb-3">Review Strategy</h4>
                       <div className="space-y-2">
                         {tips.map((tip, i) => (
                           <div key={i} className="flex items-start gap-2 text-sm">
@@ -1615,7 +1615,7 @@ function SavedReports() {
   return (
     <div className="space-y-6">
       <div className="bg-slate-800/40 border border-slate-700/30 rounded-xl p-6">
-        <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
           <span>📊</span> Saved Reports
         </h2>
         <p className="text-slate-400 text-sm mb-4">
@@ -1627,7 +1627,7 @@ function SavedReports() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-1.5 text-sm text-gray-200 focus:outline-none focus:border-indigo-500"
+              className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-1.5 text-sm text-gray-800 dark:text-gray-200 focus:outline-none focus:border-indigo-500"
             >
               <option value="date">Date</option>
               <option value="score">Score</option>
@@ -1639,7 +1639,7 @@ function SavedReports() {
             <select
               value={filterVerdict}
               onChange={(e) => setFilterVerdict(e.target.value)}
-              className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-1.5 text-sm text-gray-200 focus:outline-none focus:border-indigo-500"
+              className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-1.5 text-sm text-gray-800 dark:text-gray-200 focus:outline-none focus:border-indigo-500"
             >
               <option value="all">All</option>
               <option value="LAUNCH">🟢 LAUNCH</option>
@@ -1653,7 +1653,7 @@ function SavedReports() {
             <select
               value={filterNiche}
               onChange={(e) => setFilterNiche(e.target.value)}
-              className="bg-slate-800/80 border border-slate-600/50 rounded-lg px-3 py-1.5 text-sm text-gray-200 focus:outline-none focus:border-indigo-500"
+              className="bg-white dark:bg-slate-800/80 border border-gray-300 dark:border-slate-600/50 rounded-lg px-3 py-1.5 text-sm text-gray-800 dark:text-gray-200 focus:outline-none focus:border-indigo-500"
             >
               <option value="all">All Niches</option>
               {NICHES.map((n) => (
@@ -1664,7 +1664,7 @@ function SavedReports() {
           <button
             onClick={fetchReports}
             disabled={loading}
-            className="bg-slate-700 hover:bg-slate-600 text-gray-300 px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5 ml-auto"
+            className="bg-slate-700 hover:bg-slate-600 text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5 ml-auto"
           >
             {loading ? <Spinner /> : "🔄"} Refresh
           </button>
@@ -1697,7 +1697,7 @@ function SavedReports() {
               <div key={report.id} className="bg-slate-800/40 border border-slate-700/30 rounded-xl overflow-hidden">
                 <button
                   onClick={() => setExpandedId(isExpanded ? null : report.id)}
-                  className="w-full text-left px-5 py-4 hover:bg-slate-700/20 transition-colors"
+                  className="w-full text-left px-5 py-4 hover:bg-gray-200 dark:hover:bg-slate-700/20 transition-colors"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
@@ -1837,10 +1837,10 @@ export default function MarketingEngine() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <span>🚀</span> Marketing Engine
         </h1>
-        <p className="text-sm text-slate-500 mt-1">
+        <p className="text-sm text-gray-400 dark:text-slate-500 mt-1">
           Domain strategy, keyword research, and launch planning for 50 Canadian cities
         </p>
       </div>
@@ -1856,7 +1856,7 @@ export default function MarketingEngine() {
               className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
                 isActive
                   ? "bg-indigo-600/20 text-indigo-300 border border-indigo-500/30"
-                  : "bg-slate-800/40 text-slate-300 border border-slate-600/30 hover:bg-indigo-950/50 hover:text-slate-200 hover:border-indigo-500/20"
+                  : "bg-slate-800/40 text-gray-600 dark:text-slate-300 border border-slate-600/30 hover:bg-indigo-950/50 hover:text-gray-900 dark:hover:text-slate-200 hover:border-indigo-500/20"
               }`}
             >
               <span>{tab.icon}</span>

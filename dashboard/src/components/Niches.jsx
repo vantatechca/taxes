@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   AreaChart, Area
 } from "recharts";
@@ -85,7 +85,7 @@ function NicheDrillDown({ niche, nicheIdx, stores }) {
               </defs>
               <XAxis dataKey="date" tick={{ fill: "#6b7280", fontSize: 9 }} tickLine={false} interval={14} />
               <YAxis tick={{ fill: "#6b7280", fontSize: 9 }} tickLine={false} tickFormatter={(v) => `$${v}`} />
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} />
               <Area type="monotone" dataKey="revenue" stroke={NICHE_COLORS[nicheIdx]} fill={`url(#drillGrad${nicheIdx})`} strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
@@ -97,7 +97,7 @@ function NicheDrillDown({ niche, nicheIdx, stores }) {
             <BarChart data={topCities} layout="vertical" margin={{ left: 60 }}>
               <XAxis type="number" tick={{ fill: "#6b7280", fontSize: 9 }} tickLine={false} tickFormatter={(v) => `$${v}`} />
               <YAxis type="category" dataKey="city" tick={{ fill: "#9ca3af", fontSize: 10 }} tickLine={false} width={60} />
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} formatter={(v) => [`$${v}`, "Rev 7d"]} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} formatter={(v) => [`$${v}`, "Rev 7d"]} />
               <Bar dataKey="rev" fill={NICHE_COLORS[nicheIdx]} radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -208,9 +208,9 @@ export default function Niches() {
             <BarChart data={barData} margin={{ left: 0 }}>
               <XAxis dataKey="name" tick={{ fill: "#6b7280", fontSize: 9 }} tickLine={false} interval={0} angle={-20} textAnchor="end" height={40} />
               <YAxis tick={{ fill: "#6b7280", fontSize: 10 }} tickLine={false} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} formatter={(val) => [`$${val.toLocaleString()}`, "Revenue"]} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} formatter={(val) => [`$${val.toLocaleString()}`, "Revenue"]} />
               <Bar dataKey="rev" radius={[4, 4, 0, 0]}>
-                {barData.map((entry, i) => <rect key={i} fill={entry.color} />)}
+                {barData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
@@ -225,7 +225,7 @@ export default function Niches() {
               <PolarRadiusAxis tick={{ fill: "#6b7280", fontSize: 8 }} />
               <Radar name="Revenue" dataKey="Revenue" stroke="#6366f1" fill="#6366f1" fillOpacity={0.2} />
               <Radar name="Health" dataKey="Health" stroke="#22c55e" fill="#22c55e" fillOpacity={0.15} />
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} />
             </RadarChart>
           </ResponsiveContainer>
         </div>

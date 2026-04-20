@@ -46,7 +46,7 @@ function CityDrillDown({ city, stores }) {
               </defs>
               <XAxis dataKey="date" tick={{ fill: "#6b7280", fontSize: 9 }} tickLine={false} interval={6} />
               <YAxis tick={{ fill: "#6b7280", fontSize: 9 }} tickLine={false} tickFormatter={(v) => `$${v}`} />
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} />
               <Area type="monotone" dataKey="revenue" stroke="#6366f1" fill="url(#cityGrad)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
@@ -144,7 +144,7 @@ export default function Cities() {
             <BarChart data={top10} layout="vertical" margin={{ left: 60, right: 20 }}>
               <XAxis type="number" tick={{ fill: "#6b7280", fontSize: 10 }} tickLine={false} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
               <YAxis type="category" dataKey="city" tick={{ fill: "#9ca3af", fontSize: 11 }} tickLine={false} width={60} />
-              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px" }} formatter={(val) => [`$${val.toLocaleString()}`, "Revenue"]} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px", fontSize: "12px", color: "#e5e7eb" }} labelStyle={{ color: "#e5e7eb" }} itemStyle={{ color: "#e5e7eb" }} formatter={(val) => [`$${val.toLocaleString()}`, "Revenue"]} />
               <Bar dataKey="rev_7d" fill="#6366f1" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
