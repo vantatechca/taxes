@@ -39,7 +39,7 @@ const ROLES = {
 const uniqueCities = [...new Set(CITIES.map((c) => c.name))].sort();
 
 function AppInner() {
-  const { stores, resetAll } = useData();
+  const { stores, loading } = useData();
   const { theme, toggleTheme } = useTheme();
   const [activeTab, setActiveTab] = useState("overview");
   const [role, setRole] = useState("owner");
@@ -76,6 +76,17 @@ function AppInner() {
 
   const storeCount = stores.length;
   const liveCount = stores.filter((s) => s.status === "live").length;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-gray-400 text-sm">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 flex">

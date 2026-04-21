@@ -1,6 +1,8 @@
-import { createContext, useContext, useMemo, useCallback } from "react";
-import { useStorage, mergeEdits } from "../hooks/useStorage.js";
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
+import { useStorage } from "../hooks/useStorage.js";
 import { STORES as SEED_STORES, NICHES as SEED_NICHES, CITIES, generateAlerts } from "../data/seedData.js";
+
+const API = "";
 
 const DataContext = createContext(null);
 
@@ -16,31 +18,73 @@ const DEFAULT_FINANCIAL_CONFIG = {
   team_size: 42,
 };
 
-export function DataProvider({ children }) {
-  // Store edits: { [store_id]: { field: newValue, ... } }
-  const [storeEdits, setStoreEdits] = useStorage("store_edits", {});
-  // Added stores (user-created)
-  const [addedStores, setAddedStores] = useStorage("added_stores", []);
-  // Niche edits: { [niche_id]: { field: newValue, ... } }
-  const [nicheEdits, setNicheEdits] = useStorage("niche_edits", {});
-  // Financial config (fully editable)
-  const [financialConfig, setFinancialConfig] = useStorage("financial_config", DEFAULT_FINANCIAL_CONFIG);
-  // Content logs
-  const [contentLogs, setContentLogs] = useStorage("content_logs", []);
-  // CS tickets (user-created)
-  const [csTickets, setCsTickets] = useStorage("cs_tickets", []);
-  // Dismissed alert keys
-  const [dismissedAlerts, setDismissedAlerts] = useStorage("dismissed_alerts", []);
-  // Store checklist overrides: { [store_id]: { domain: true, ... } }
-  const [checklists, setChecklists] = useStorage("store_checklists", {});
-  // Notes per store
-  const [storeNotes, setStoreNotes] = useStorage("store_notes", {});
+const CHECKLIST_DEFAULTS = {
+  domain: false, shopify_live: false, products_uploaded: false,
+  payments_active: false, gmb_active: false, blogs_published: false,
+  email_sequences: false, cs_setup: false, gsc_verified: false,
+};
 
-  // Merge seed data with user edits
-  const stores = useMemo(() => {
-    const merged = mergeEdits(SEED_STORES, storeEdits, "store_id");
-    return [...merged, ...addedStores];
-  }, [storeEdits, addedStores]);
+export function DataProvider({ children }) {
+  const [stores, setStores] = useState([]);
+  const [contentLogs, setContentLogs] = useState([]);
+  const [csTickets, setCsTickets] = useState([]);
+  const [financialConfig, setFinancialConfigState] = useState(DEFAULT_FINANCIAL_CONFIG);
+  const [checklists, setChecklists] = useState({});
+  const [storeNotes, setStoreNotes] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  // Keep niche edits in localStorage (static data, minor overrides)
+  const [nicheEdits, setNicheEdits] = useStorage("niche_edits", {});
+  const [dismissedAlerts, setDismissedAlerts] = useStorage("dismissed_alerts", []);
+
+  // Load all data from Neon on mount
+  useEffect(() => {
+    async function loadAll() {
+      try {
+        const [storesRes, contentRes, ticketsRes, financialRes, checklistsRes, notesRes] = await Promise.all([
+          fetch(`${API}/api/data/stores`),
+          fetch(`${API}/api/data/content`),
+          fetch(`${API}/api/data/tickets`),
+          fetch(`${API}/api/data/financial`),
+          fetch(`${API}/api/data/checklists`),
+          fetch(`${API}/api/data/notes`),
+        ]);
+
+        const [storesData, contentData, ticketsData, financialData, checklistsData, notesData] = await Promise.all([
+          storesRes.json(), contentRes.json(), ticketsRes.json(),
+          financialRes.json(), checklistsRes.json(), notesRes.json(),
+        ]);
+
+        let loadedStores = storesData.stores || [];
+
+        // Seed mock stores only if VITE_MOCK_DATA=true and Neon is empty
+        const mockEnabled = import.meta.env.VITE_MOCK_DATA === "true";
+        if (loadedStores.length === 0 && mockEnabled) {
+          const seedRes = await fetch(`${API}/api/data/stores/seed`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ stores: SEED_STORES }),
+          });
+          const seedData = await seedRes.json();
+          if (seedData.success) loadedStores = SEED_STORES;
+        }
+
+        setStores(loadedStores);
+        setContentLogs(contentData.logs || []);
+        setCsTickets(ticketsData.tickets || []);
+        setFinancialConfigState(financialData.config || DEFAULT_FINANCIAL_CONFIG);
+        setChecklists(checklistsData.checklists || {});
+        setStoreNotes(notesData.notes || {});
+      } catch (err) {
+        console.error('[DataContext] Failed to load data:', err.message);
+        // Fallback to seed data if API fails
+        setStores(SEED_STORES);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadAll();
+  }, []);
 
   const niches = useMemo(() => {
     return SEED_NICHES.map((n) => {
@@ -50,66 +94,129 @@ export function DataProvider({ children }) {
   }, [nicheEdits]);
 
   const alerts = useMemo(() => {
+    if (import.meta.env.VITE_MOCK_DATA !== "true") return [];
     return generateAlerts().filter((a, i) => !dismissedAlerts.includes(i));
   }, [dismissedAlerts]);
 
   // --- Store actions ---
-  const updateStore = useCallback((storeId, changes) => {
-    setStoreEdits((prev) => ({
-      ...prev,
-      [storeId]: { ...(prev[storeId] || {}), ...changes },
-    }));
-  }, [setStoreEdits]);
-
-  const bulkUpdateStores = useCallback((storeIds, changes) => {
-    setStoreEdits((prev) => {
-      const next = { ...prev };
-      storeIds.forEach((id) => {
-        next[id] = { ...(next[id] || {}), ...changes };
+  const updateStore = useCallback(async (storeId, changes) => {
+    setStores((prev) => prev.map((s) => s.store_id === storeId ? { ...s, ...changes } : s));
+    try {
+      await fetch(`${API}/api/data/stores/${storeId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(changes),
       });
-      return next;
-    });
-  }, [setStoreEdits]);
+    } catch (err) {
+      console.error('[DataContext] updateStore failed:', err.message);
+    }
+  }, []);
 
-  const addStore = useCallback((store) => {
-    setAddedStores((prev) => [...prev, store]);
-  }, [setAddedStores]);
+  const bulkUpdateStores = useCallback(async (storeIds, changes) => {
+    const idSet = new Set(storeIds);
+    setStores((prev) => prev.map((s) => idSet.has(s.store_id) ? { ...s, ...changes } : s));
+    try {
+      await fetch(`${API}/api/data/stores/bulk-update`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: storeIds, changes }),
+      });
+    } catch (err) {
+      console.error('[DataContext] bulkUpdateStores failed:', err.message);
+    }
+  }, []);
 
-  const deleteStore = useCallback((storeId) => {
-    // Remove from added stores if user-created
-    setAddedStores((prev) => prev.filter((s) => s.store_id !== storeId));
-    // Mark seed store as dead
-    setStoreEdits((prev) => ({
-      ...prev,
-      [storeId]: { ...(prev[storeId] || {}), status: "dead" },
-    }));
-  }, [setAddedStores, setStoreEdits]);
+  const addStore = useCallback(async (store) => {
+    setStores((prev) => [...prev, store]);
+    try {
+      await fetch(`${API}/api/data/stores`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(store),
+      });
+    } catch (err) {
+      console.error('[DataContext] addStore failed:', err.message);
+    }
+  }, []);
+
+  const deleteStore = useCallback(async (storeId) => {
+    setStores((prev) => prev.filter((s) => s.store_id !== storeId));
+    try {
+      await fetch(`${API}/api/data/stores/${storeId}`, { method: "DELETE" });
+    } catch (err) {
+      console.error('[DataContext] deleteStore failed:', err.message);
+    }
+  }, []);
 
   // --- Niche actions ---
   const updateNiche = useCallback((nicheId, changes) => {
-    setNicheEdits((prev) => ({
-      ...prev,
-      [nicheId]: { ...(prev[nicheId] || {}), ...changes },
-    }));
+    setNicheEdits((prev) => ({ ...prev, [nicheId]: { ...(prev[nicheId] || {}), ...changes } }));
   }, [setNicheEdits]);
 
   // --- Content actions ---
-  const addContentLog = useCallback((entry) => {
-    setContentLogs((prev) => [{ ...entry, id: Date.now(), logged_at: new Date().toISOString() }, ...prev]);
-  }, [setContentLogs]);
+  const addContentLog = useCallback(async (entry) => {
+    const newEntry = { ...entry, id: Date.now(), logged_at: new Date().toISOString() };
+    setContentLogs((prev) => [newEntry, ...prev]);
+    try {
+      await fetch(`${API}/api/data/content`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(entry),
+      });
+    } catch (err) {
+      console.error('[DataContext] addContentLog failed:', err.message);
+    }
+  }, []);
 
-  const deleteContentLog = useCallback((logId) => {
+  const deleteContentLog = useCallback(async (logId) => {
     setContentLogs((prev) => prev.filter((l) => l.id !== logId));
-  }, [setContentLogs]);
+    try {
+      await fetch(`${API}/api/data/content/${logId}`, { method: "DELETE" });
+    } catch (err) {
+      console.error('[DataContext] deleteContentLog failed:', err.message);
+    }
+  }, []);
 
   // --- CS actions ---
-  const addTicket = useCallback((ticket) => {
-    setCsTickets((prev) => [{ ...ticket, id: Date.now(), created_at: new Date().toISOString(), status: "open" }, ...prev]);
-  }, [setCsTickets]);
+  const addTicket = useCallback(async (ticket) => {
+    const newTicket = { ...ticket, id: Date.now(), created_at: new Date().toISOString(), status: "open" };
+    setCsTickets((prev) => [newTicket, ...prev]);
+    try {
+      await fetch(`${API}/api/data/tickets`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(ticket),
+      });
+    } catch (err) {
+      console.error('[DataContext] addTicket failed:', err.message);
+    }
+  }, []);
 
-  const resolveTicket = useCallback((ticketId) => {
+  const resolveTicket = useCallback(async (ticketId) => {
     setCsTickets((prev) => prev.map((t) => t.id === ticketId ? { ...t, status: "resolved", resolved_at: new Date().toISOString() } : t));
-  }, [setCsTickets]);
+    try {
+      await fetch(`${API}/api/data/tickets/${ticketId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "resolved", resolved_at: new Date().toISOString() }),
+      });
+    } catch (err) {
+      console.error('[DataContext] resolveTicket failed:', err.message);
+    }
+  }, []);
+
+  // --- Financial actions ---
+  const setFinancialConfig = useCallback(async (updater) => {
+    setFinancialConfigState((prev) => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      fetch(`${API}/api/data/financial`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(next),
+      }).catch((err) => console.error('[DataContext] setFinancialConfig failed:', err.message));
+      return next;
+    });
+  }, []);
 
   // --- Alert actions ---
   const dismissAlert = useCallback((alertIndex) => {
@@ -117,65 +224,54 @@ export function DataProvider({ children }) {
   }, [setDismissedAlerts]);
 
   // --- Checklist actions ---
-  const updateChecklist = useCallback((storeId, key, value) => {
+  const updateChecklist = useCallback(async (storeId, key, value) => {
     setChecklists((prev) => ({
       ...prev,
       [storeId]: { ...(prev[storeId] || {}), [key]: value },
     }));
-  }, [setChecklists]);
+    try {
+      await fetch(`${API}/api/data/checklists/${storeId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [key]: value }),
+      });
+    } catch (err) {
+      console.error('[DataContext] updateChecklist failed:', err.message);
+    }
+  }, []);
 
   const getChecklist = useCallback((storeId) => {
-    const defaults = {
-      domain: false, shopify_live: false, products_uploaded: false,
-      payments_active: false, gmb_active: false, blogs_published: false,
-      email_sequences: false, cs_setup: false, gsc_verified: false,
-    };
-    return { ...defaults, ...(checklists[storeId] || {}) };
+    return { ...CHECKLIST_DEFAULTS, ...(checklists[storeId] || {}) };
   }, [checklists]);
 
   // --- Notes actions ---
-  const addNote = useCallback((storeId, note) => {
+  const addNote = useCallback(async (storeId, note) => {
     setStoreNotes((prev) => ({
       ...prev,
       [storeId]: [...(prev[storeId] || []), { text: note, date: new Date().toISOString() }],
     }));
-  }, [setStoreNotes]);
-
-  // --- Reset ---
-  const resetAll = useCallback(() => {
-    setStoreEdits({});
-    setAddedStores([]);
-    setNicheEdits({});
-    setFinancialConfig(DEFAULT_FINANCIAL_CONFIG);
-    setContentLogs([]);
-    setCsTickets([]);
-    setDismissedAlerts([]);
-    setChecklists({});
-    setStoreNotes({});
-  }, [setStoreEdits, setAddedStores, setNicheEdits, setFinancialConfig, setContentLogs, setCsTickets, setDismissedAlerts, setChecklists, setStoreNotes]);
+    try {
+      await fetch(`${API}/api/data/notes/${storeId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: note }),
+      });
+    } catch (err) {
+      console.error('[DataContext] addNote failed:', err.message);
+    }
+  }, []);
 
   const value = {
-    // Data
-    stores, niches, cities: CITIES, alerts,
+    stores, niches, cities: CITIES, alerts, loading,
     financialConfig, contentLogs, csTickets, storeNotes,
-    // Store actions
     updateStore, bulkUpdateStores, addStore, deleteStore,
-    // Niche actions
     updateNiche,
-    // Financial actions
     setFinancialConfig,
-    // Content actions
     addContentLog, deleteContentLog,
-    // CS actions
     addTicket, resolveTicket,
-    // Alert actions
     dismissAlert,
-    // Checklist
     updateChecklist, getChecklist,
-    // Notes
     addNote,
-    // Reset
-    resetAll,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

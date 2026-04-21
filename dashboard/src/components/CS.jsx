@@ -120,16 +120,24 @@ function TicketRow({ ticket, onResolve, isUserTicket }) {
 export default function CS() {
   const { stores, csTickets, addTicket, resolveTicket } = useData();
   const { notify } = useNotifications();
-  const seedMetrics = useMemo(() => getCSMetrics(), []);
+  const mockEnabled = import.meta.env.VITE_MOCK_DATA === "true";
+  const seedMetrics = useMemo(() => mockEnabled ? getCSMetrics() : {
+    tickets: [], refund_value: 0, avg_response_hours: 0, resolution_rate: 0,
+    sla_compliance: 0, csat_score: 0, escalations: 0, chargebacks: 0,
+    resolved_today: 0, new_today: 0, ticket_types: {}, priority_breakdown: {},
+    top_refund_stores: [],
+  }, [mockEnabled]);
   const [showForm, setShowForm] = useState(false);
   const [ticketFilter, setTicketFilter] = useState("all"); // all, open, resolved
 
   // Merge seed tickets + user tickets
   const allTickets = useMemo(() => {
-    const seed = seedMetrics.tickets.map((t, i) => ({ ...t, id: `seed_${i}`, source: "seed", status: "open" }));
+    const seed = mockEnabled
+      ? seedMetrics.tickets.map((t, i) => ({ ...t, id: `seed_${i}`, source: "seed", status: "open" }))
+      : [];
     const user = csTickets.map((t) => ({ ...t, source: "user" }));
     return [...user, ...seed];
-  }, [seedMetrics.tickets, csTickets]);
+  }, [seedMetrics.tickets, csTickets, mockEnabled]);
 
   const openTickets = allTickets.filter((t) => t.status !== "resolved");
   const resolvedTickets = allTickets.filter((t) => t.status === "resolved");

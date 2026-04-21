@@ -127,8 +127,9 @@ export default function Content({ filters }) {
     deleteContentLog(id);
     notify("Content log removed", "info");
   }
-  const contentMetrics = useMemo(() => getContentMetrics(), []);
-  const nicheMetrics = useMemo(() => getNicheMetrics(), []);
+  const mockEnabled = import.meta.env.VITE_MOCK_DATA === "true";
+  const contentMetrics = useMemo(() => mockEnabled ? getContentMetrics() : [], [mockEnabled]);
+  const nicheMetrics = useMemo(() => mockEnabled ? getNicheMetrics() : [], [mockEnabled]);
 
   const totalPosts = contentMetrics.reduce((a, c) => a + c.blog_posts, 0);
   const totalProducts = contentMetrics.reduce((a, c) => a + c.products, 0);

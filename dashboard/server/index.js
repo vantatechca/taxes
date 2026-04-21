@@ -28,6 +28,7 @@ app.use((req, res, next) => {
   next();
 });
 
+const dataRoutes = require('./routes/data');
 const etsyRoutes = require('./routes/etsy');
 const trendsRoutes = require('./routes/trends');
 const plrRoutes = require('./routes/plr');
@@ -39,6 +40,7 @@ const brandRoutes = require('./routes/brand');
 const marketingRoutes = require('./routes/marketing');
 
 app.use('/uploads', express.static(path.join(__dirname, 'data', 'uploads')));
+app.use('/api/data', dataRoutes);
 app.use('/api/etsy', etsyRoutes);
 app.use('/api/trends', trendsRoutes);
 app.use('/api/plr', plrRoutes);
