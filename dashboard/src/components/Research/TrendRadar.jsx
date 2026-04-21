@@ -1397,7 +1397,7 @@ export default function TrendRadar() {
                         <span>{item.emoji}</span>
                         <div>
                           <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{item.niche}</p>
-                          <p className="text-xs text-slate-500">{item.keyword}</p>
+                          <p className="text-xs text-gray-500 dark:text-slate-500">{item.keyword}</p>
                         </div>
                       </div>
                       <div className="text-right">
@@ -1426,7 +1426,7 @@ export default function TrendRadar() {
                         <span>{item.emoji}</span>
                         <div>
                           <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{item.niche}</p>
-                          <p className="text-xs text-slate-500">{item.keyword}</p>
+                          <p className="text-xs text-gray-500 dark:text-slate-500">{item.keyword}</p>
                         </div>
                       </div>
                       <div className="text-right">
@@ -1449,13 +1449,13 @@ export default function TrendRadar() {
                     <button
                       key={i}
                       onClick={() => loadKeywordIntoDeepDive(item.keyword)}
-                      className="w-full text-left bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700/80 rounded-lg px-4 py-3 flex items-center justify-between transition-colors hover:ring-1 hover:ring-red-500/30"
+                      className="w-full text-left bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700/80 rounded-lg px-4 py-3 flex items-center justify-between transition-colors hover:ring-1 hover:ring-red-500/30"
                     >
                       <div className="flex items-center gap-3">
                         <span>{item.emoji}</span>
                         <div>
                           <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">{item.niche}</p>
-                          <p className="text-xs text-slate-500">{item.keyword}</p>
+                          <p className="text-xs text-gray-500 dark:text-slate-500">{item.keyword}</p>
                         </div>
                       </div>
                       <div className="text-right">
