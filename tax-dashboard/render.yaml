@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: tax-dashboard
+    env: node
+    rootDir: tax-dashboard
+    buildCommand: cd client && npm install && npm run build && cd ../server && npm install && npm run build
+    startCommand: node server/dist/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3004
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: CLIENT_URL
+        sync: false
