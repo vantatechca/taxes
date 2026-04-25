@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { Pool } = require('pg');
+const bcrypt = require('bcryptjs');
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -33,6 +34,36 @@ async function initDB() {
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )
   `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      name VARCHAR(100) NOT NULL,
+      email VARCHAR(255) UNIQUE NOT NULL,
+      password_hash TEXT NOT NULL,
+      role VARCHAR(20) NOT NULL DEFAULT 'member',
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `);
+}
+
+const INITIAL_USERS = [
+  { name: 'Andrei', email: 'andrei@empire.com', password: 'andrei123', role: 'owner' },
+  { name: 'Jerome', email: 'jerome@empire.com', password: 'jerome123', role: 'lead' },
+  { name: 'Joanne', email: 'joanne@empire.com', password: 'joanne123', role: 'lead' },
+];
+
+async function seedUsers() {
+  for (const u of INITIAL_USERS) {
+    const existing = await pool.query('SELECT id FROM users WHERE email = $1', [u.email]);
+    if (!existing.rows.length) {
+      const hash = await bcrypt.hash(u.password, 12);
+      await pool.query(
+        'INSERT INTO users (name, email, password_hash, role) VALUES ($1, $2, $3, $4)',
+        [u.name, u.email, hash, u.role]
+      );
+      console.log(`[seed] Created user: ${u.name} (${u.role})`);
+    }
+  }
 }
 
 async function seedDB() {
@@ -43,6 +74,7 @@ async function seedDB() {
       console.log(`[seed] Seeded ${name} with ${data.length} records`);
     }
   }
+  await seedUsers();
 }
 
 async function getCollection(name) {

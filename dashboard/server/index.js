@@ -38,18 +38,27 @@ const scoreboardRoutes = require('./routes/scoreboard');
 const assistantRoutes = require('./routes/assistant');
 const brandRoutes = require('./routes/brand');
 const marketingRoutes = require('./routes/marketing');
+const authRoutes = require('./routes/auth');
+const usersRoutes = require('./routes/users');
+const { requireAuth } = require('./middleware/auth');
 
 app.use('/uploads', express.static(path.join(__dirname, 'data', 'uploads')));
-app.use('/api/data', dataRoutes);
-app.use('/api/etsy', etsyRoutes);
-app.use('/api/trends', trendsRoutes);
-app.use('/api/plr', plrRoutes);
-app.use('/api/proxies', proxyRoutes);
-app.use('/api/schedules', scheduleRoutes);
-app.use('/api/scoreboard', scoreboardRoutes);
-app.use('/api/assistant', assistantRoutes);
-app.use('/api/brands', brandRoutes);
-app.use('/api/marketing', marketingRoutes);
+
+// Auth routes — public
+app.use('/api/auth', authRoutes);
+
+// All other API routes require a valid JWT
+app.use('/api/data', requireAuth, dataRoutes);
+app.use('/api/etsy', requireAuth, etsyRoutes);
+app.use('/api/trends', requireAuth, trendsRoutes);
+app.use('/api/plr', requireAuth, plrRoutes);
+app.use('/api/proxies', requireAuth, proxyRoutes);
+app.use('/api/schedules', requireAuth, scheduleRoutes);
+app.use('/api/scoreboard', requireAuth, scoreboardRoutes);
+app.use('/api/assistant', requireAuth, assistantRoutes);
+app.use('/api/brands', requireAuth, brandRoutes);
+app.use('/api/marketing', requireAuth, marketingRoutes);
+app.use('/api/users', usersRoutes);
 
 app.get('/api/health', async (req, res) => {
   try {

@@ -4,6 +4,18 @@ import { STORES as SEED_STORES, NICHES as SEED_NICHES, CITIES, generateAlerts } 
 
 const API = "";
 
+function apiFetch(url, options = {}) {
+  const token = localStorage.getItem('de_token');
+  return fetch(url, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers || {}),
+    },
+  });
+}
+
 const DataContext = createContext(null);
 
 const DEFAULT_FINANCIAL_CONFIG = {
@@ -42,12 +54,12 @@ export function DataProvider({ children }) {
     async function loadAll() {
       try {
         const [storesRes, contentRes, ticketsRes, financialRes, checklistsRes, notesRes] = await Promise.all([
-          fetch(`${API}/api/data/stores`),
-          fetch(`${API}/api/data/content`),
-          fetch(`${API}/api/data/tickets`),
-          fetch(`${API}/api/data/financial`),
-          fetch(`${API}/api/data/checklists`),
-          fetch(`${API}/api/data/notes`),
+          apiFetch(`${API}/api/data/stores`),
+          apiFetch(`${API}/api/data/content`),
+          apiFetch(`${API}/api/data/tickets`),
+          apiFetch(`${API}/api/data/financial`),
+          apiFetch(`${API}/api/data/checklists`),
+          apiFetch(`${API}/api/data/notes`),
         ]);
 
         const [storesData, contentData, ticketsData, financialData, checklistsData, notesData] = await Promise.all([
@@ -60,9 +72,8 @@ export function DataProvider({ children }) {
         // Seed mock stores only if VITE_MOCK_DATA=true and Neon is empty
         const mockEnabled = import.meta.env.VITE_MOCK_DATA === "true";
         if (loadedStores.length === 0 && mockEnabled) {
-          const seedRes = await fetch(`${API}/api/data/stores/seed`, {
+          const seedRes = await apiFetch(`${API}/api/data/stores/seed`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ stores: SEED_STORES }),
           });
           const seedData = await seedRes.json();
@@ -102,9 +113,8 @@ export function DataProvider({ children }) {
   const updateStore = useCallback(async (storeId, changes) => {
     setStores((prev) => prev.map((s) => s.store_id === storeId ? { ...s, ...changes } : s));
     try {
-      await fetch(`${API}/api/data/stores/${storeId}`, {
+      await apiFetch(`${API}/api/data/stores/${storeId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(changes),
       });
     } catch (err) {
@@ -116,9 +126,8 @@ export function DataProvider({ children }) {
     const idSet = new Set(storeIds);
     setStores((prev) => prev.map((s) => idSet.has(s.store_id) ? { ...s, ...changes } : s));
     try {
-      await fetch(`${API}/api/data/stores/bulk-update`, {
+      await apiFetch(`${API}/api/data/stores/bulk-update`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ids: storeIds, changes }),
       });
     } catch (err) {
@@ -129,9 +138,8 @@ export function DataProvider({ children }) {
   const addStore = useCallback(async (store) => {
     setStores((prev) => [...prev, store]);
     try {
-      await fetch(`${API}/api/data/stores`, {
+      await apiFetch(`${API}/api/data/stores`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(store),
       });
     } catch (err) {
@@ -142,7 +150,7 @@ export function DataProvider({ children }) {
   const deleteStore = useCallback(async (storeId) => {
     setStores((prev) => prev.filter((s) => s.store_id !== storeId));
     try {
-      await fetch(`${API}/api/data/stores/${storeId}`, { method: "DELETE" });
+      await apiFetch(`${API}/api/data/stores/${storeId}`, { method: "DELETE" });
     } catch (err) {
       console.error('[DataContext] deleteStore failed:', err.message);
     }
@@ -158,9 +166,8 @@ export function DataProvider({ children }) {
     const newEntry = { ...entry, id: Date.now(), logged_at: new Date().toISOString() };
     setContentLogs((prev) => [newEntry, ...prev]);
     try {
-      await fetch(`${API}/api/data/content`, {
+      await apiFetch(`${API}/api/data/content`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(entry),
       });
     } catch (err) {
@@ -171,7 +178,7 @@ export function DataProvider({ children }) {
   const deleteContentLog = useCallback(async (logId) => {
     setContentLogs((prev) => prev.filter((l) => l.id !== logId));
     try {
-      await fetch(`${API}/api/data/content/${logId}`, { method: "DELETE" });
+      await apiFetch(`${API}/api/data/content/${logId}`, { method: "DELETE" });
     } catch (err) {
       console.error('[DataContext] deleteContentLog failed:', err.message);
     }
@@ -182,9 +189,8 @@ export function DataProvider({ children }) {
     const newTicket = { ...ticket, id: Date.now(), created_at: new Date().toISOString(), status: "open" };
     setCsTickets((prev) => [newTicket, ...prev]);
     try {
-      await fetch(`${API}/api/data/tickets`, {
+      await apiFetch(`${API}/api/data/tickets`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(ticket),
       });
     } catch (err) {
@@ -195,9 +201,8 @@ export function DataProvider({ children }) {
   const resolveTicket = useCallback(async (ticketId) => {
     setCsTickets((prev) => prev.map((t) => t.id === ticketId ? { ...t, status: "resolved", resolved_at: new Date().toISOString() } : t));
     try {
-      await fetch(`${API}/api/data/tickets/${ticketId}`, {
+      await apiFetch(`${API}/api/data/tickets/${ticketId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: "resolved", resolved_at: new Date().toISOString() }),
       });
     } catch (err) {
@@ -209,9 +214,8 @@ export function DataProvider({ children }) {
   const setFinancialConfig = useCallback(async (updater) => {
     setFinancialConfigState((prev) => {
       const next = typeof updater === "function" ? updater(prev) : updater;
-      fetch(`${API}/api/data/financial`, {
+      apiFetch(`${API}/api/data/financial`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(next),
       }).catch((err) => console.error('[DataContext] setFinancialConfig failed:', err.message));
       return next;
@@ -230,9 +234,8 @@ export function DataProvider({ children }) {
       [storeId]: { ...(prev[storeId] || {}), [key]: value },
     }));
     try {
-      await fetch(`${API}/api/data/checklists/${storeId}`, {
+      await apiFetch(`${API}/api/data/checklists/${storeId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ [key]: value }),
       });
     } catch (err) {
@@ -251,9 +254,8 @@ export function DataProvider({ children }) {
       [storeId]: [...(prev[storeId] || []), { text: note, date: new Date().toISOString() }],
     }));
     try {
-      await fetch(`${API}/api/data/notes/${storeId}`, {
+      await apiFetch(`${API}/api/data/notes/${storeId}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: note }),
       });
     } catch (err) {

@@ -2,6 +2,9 @@ import { useState } from "react";
 import { DataProvider, useData } from "./context/DataContext.jsx";
 import { ThemeProvider, useTheme } from "./context/ThemeContext.jsx";
 import { NotificationProvider } from "./context/NotificationContext.jsx";
+import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
+import LoginPage from "./components/LoginPage.jsx";
+import UsersPage from "./components/UsersPage.jsx";
 import Overview from "./components/Overview.jsx";
 import Niches from "./components/Niches.jsx";
 import Cities from "./components/Cities.jsx";
@@ -27,30 +30,23 @@ const TABS = [
   { id: "financial", label: "Financial", icon: "\uD83D\uDCB0", roles: ["owner"] },
   { id: "research", label: "Research", icon: "\uD83D\uDD2C", roles: ["owner"] },
   { id: "brandstudio", label: "Brand Studio", icon: "\uD83C\uDFA8", roles: ["owner"] },
+  { id: "users", label: "Users", icon: "\uD83D\uDC65", roles: ["owner"] },
 ];
 
-const ROLES = {
-  owner: { name: "Andrei", role: "Owner", level: "owner" },
-  lead_jerome: { name: "Jerome", role: "Team Lead", level: "lead" },
-  lead_joanne: { name: "Joanne", role: "Team Lead", level: "lead" },
-  member: { name: "Team Member", role: "Member", level: "member" },
-};
+const ROLE_LABELS = { owner: "Owner", lead: "Team Lead", member: "Member" };
 
 const uniqueCities = [...new Set(CITIES.map((c) => c.name))].sort();
 
 function AppInner() {
   const { stores, loading } = useData();
   const { theme, toggleTheme } = useTheme();
+  const { user, signOut, isOwner } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
-  const [role, setRole] = useState("owner");
   const [filters, setFilters] = useState({ niche: "all", city: "all", status: "all", dateRange: "7d" });
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
-  const currentRole = ROLES[role];
-  const visibleTabs = TABS.filter((t) => t.roles.includes(currentRole.level));
+  const visibleTabs = TABS.filter((t) => t.roles.includes(user?.role || "member"));
 
-  // If current tab not visible for role, reset to first visible
   if (!visibleTabs.find((t) => t.id === activeTab)) {
     setActiveTab(visibleTabs[0]?.id || "overview");
   }
@@ -70,6 +66,7 @@ function AppInner() {
       case "financial": return <Financial filters={filters} />;
       case "research": return <Research />;
       case "brandstudio": return <BrandStudio />;
+      case "users": return <UsersPage />;
       default: return <Overview filters={filters} onNavigate={setActiveTab} />;
     }
   }
@@ -127,23 +124,24 @@ function AppInner() {
           })}
         </nav>
 
-        {/* Reset data button */}
-
-        {/* User */}
+        {/* User + sign out */}
         <div className="border-t border-gray-800 px-3 py-3">
           {sidebarOpen ? (
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold shrink-0">
-                {currentRole.name.charAt(0)}
+                {user?.name?.charAt(0) || "?"}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-gray-200 truncate">{currentRole.name}</p>
-                <p className="text-xs text-gray-500">{currentRole.role}</p>
+                <p className="text-xs font-medium text-gray-200 truncate">{user?.name}</p>
+                <p className="text-xs text-gray-500">{ROLE_LABELS[user?.role] || user?.role}</p>
               </div>
+              <button onClick={signOut} title="Sign out" className="p-1.5 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-400/10 transition-colors">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+              </button>
             </div>
           ) : (
             <div className="w-7 h-7 mx-auto rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold">
-              {currentRole.name.charAt(0)}
+              {user?.name?.charAt(0) || "?"}
             </div>
           )}
         </div>
@@ -204,13 +202,6 @@ function AppInner() {
               <option value="90d">Last 90 days</option>
               <option value="all">All Time</option>
             </select>
-
-            <select value={role} onChange={(e) => setRole(e.target.value)} className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-xs text-gray-300 focus:outline-none focus:border-indigo-500">
-              <option value="owner">Andrei (Owner)</option>
-              <option value="lead_jerome">Jerome (Lead)</option>
-              <option value="lead_joanne">Joanne (Lead)</option>
-              <option value="member">Team Member</option>
-            </select>
           </div>
         </header>
 
@@ -245,14 +236,31 @@ function AppInner() {
   );
 }
 
+function AuthGate() {
+  const { user, loading } = useAuth();
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+  if (!user) return <LoginPage />;
+  return (
+    <NotificationProvider>
+      <DataProvider>
+        <AppInner />
+      </DataProvider>
+    </NotificationProvider>
+  );
+}
+
 export default function App() {
   return (
     <ThemeProvider>
-      <NotificationProvider>
-        <DataProvider>
-          <AppInner />
-        </DataProvider>
-      </NotificationProvider>
+      <AuthProvider>
+        <AuthGate />
+      </AuthProvider>
     </ThemeProvider>
   );
 }
