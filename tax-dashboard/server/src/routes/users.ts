@@ -48,6 +48,7 @@ usersRouter.put('/:id', requireRole('admin'), async (req: Request, res: Response
 usersRouter.delete('/:id', requireRole('admin'), async (req: Request, res: Response) => {
   if (req.params.id === req.userId) { res.status(400).json({ error: 'Cannot delete yourself' }); return; }
   try {
+    await db.query('DELETE FROM audit_log WHERE user_id = $1', [req.params.id]);
     await db.query('DELETE FROM users WHERE id = $1', [req.params.id]);
     res.json({ success: true });
   } catch (err: any) { res.status(500).json({ error: err.message }); }
